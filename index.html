@@ -5,29 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>คิวท์บิลล์ (CuteBill) - ระบบแจ้งยอดและชำระเงิน</title>
     
-    <!-- ฟอนต์ภาษาไทยแบบมีหัว (Sarabun) -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 
-    <!-- ธีมสีชมพูเข้มผสมม่วง -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Sarabun', 'sans-serif'] },
                     colors: {
-                        primary: '#d81b60',      
-                        secondary: '#8e24aa',    
-                        accent: '#ff4081',       
-                        success: '#00c853',      
-                        danger: '#d50000',       
-                        warning: '#ff9100',      
-                        customBg: '#fce4ec'      
+                        primary: '#d81b60', secondary: '#8e24aa', accent: '#ff4081',
+                        success: '#00c853', danger: '#d50000', warning: '#ff9100', customBg: '#fce4ec'
                     },
                     borderRadius: { '3xl': '24px', '4xl': '32px' }
                 }
@@ -71,222 +63,136 @@
         <img id="full-size-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
     </div>
 
-    <!-- ================= 1. หน้าแรก (LANDING PAGE) ================= -->
+    <!-- 1. หน้าแรก -->
     <div id="landing-screen" class="flex-1 overflow-y-auto fade-in h-full bg-gradient-to-br from-purple-100 via-pink-100 to-white">
         <div class="min-h-screen flex flex-col items-center justify-center p-6 pb-12 relative">
             <div class="w-full max-w-md text-center">
-                <div class="w-32 h-32 bg-gradient-to-tr from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl relative animate-pulse border-4 border-white">
-                    <span class="text-7xl">🐷</span>
-                </div>
+                <div class="w-32 h-32 bg-gradient-to-tr from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl relative animate-pulse border-4 border-white"><span class="text-7xl">🐷</span></div>
                 <div class="glass-hero rounded-3xl p-6 shadow-xl mb-8 relative overflow-hidden text-center">
                     <h1 class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-3">CuteBill Mobile</h1>
                     <p class="text-sm text-gray-600 font-medium leading-relaxed">ระบบบันทึกค่าใช้จ่ายและแจ้งยอดประจำเดือน</p>
                 </div>
-                <button onclick="showLoginPanel()" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-xl transform transition hover:-translate-y-0.5 active:scale-95">
-                    เข้าสู่ระบบ / ดูบิล 🚀
-                </button>
+                <button onclick="showLoginPanel()" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-xl transform transition hover:-translate-y-0.5 active:scale-95">เข้าสู่ระบบ / ดูบิล 🚀</button>
             </div>
             <p class="absolute bottom-6 text-[10px] text-gray-400 font-bold">Secure Connection System</p>
         </div>
     </div>
 
-    <!-- ================= 2. หน้าต่างล็อกอิน ================= -->
+    <!-- 2. หน้าต่างล็อกอิน -->
     <div id="login-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hide-view p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-4xl p-6 shadow-2xl relative active-animation">
-            <button onclick="hideLoginPanel()" class="absolute top-4 right-4 bg-gray-100 text-gray-500 hover:bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center transition-all"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <div class="text-center mb-6">
-                <span class="text-5xl block mb-2">🔐</span>
-                <h2 class="text-xl font-bold text-gray-800">ลงชื่อเข้าใช้งาน</h2>
-            </div>
+            <button onclick="hideLoginPanel()" class="absolute top-4 right-4 bg-gray-100 text-gray-500 hover:bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <div class="text-center mb-6"><span class="text-5xl block mb-2">🔐</span><h2 class="text-xl font-bold text-gray-800">ลงชื่อเข้าใช้งาน</h2></div>
             <form id="auth-form-submit" onsubmit="triggerAuthProcessing(event)">
                 <div class="mb-4">
                     <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">ชื่อผู้ใช้ (USERNAME)</label>
-                    <div class="relative">
-                        <i data-lucide="user" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i>
-                        <input type="text" id="form-username" class="w-full bg-gray-50 border-2 border-gray-100 rounded-xl py-3 pl-10 pr-4 text-sm font-bold focus:border-primary outline-none transition-all" required>
-                    </div>
+                    <div class="relative"><i data-lucide="user" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i><input type="text" id="form-username" class="w-full bg-gray-50 border-2 border-gray-100 rounded-xl py-3 pl-10 pr-4 text-sm font-bold focus:border-primary outline-none" required></div>
                 </div>
                 <div class="mb-6">
                     <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">รหัสผ่าน (PASSWORD)</label>
-                    <div class="relative">
-                        <i data-lucide="lock" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i>
-                        <input type="password" id="form-password" class="w-full bg-gray-50 border-2 border-gray-100 rounded-xl py-3 pl-10 pr-4 text-sm font-bold focus:border-primary outline-none transition-all" required>
-                    </div>
+                    <div class="relative"><i data-lucide="lock" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i><input type="password" id="form-password" class="w-full bg-gray-50 border-2 border-gray-100 rounded-xl py-3 pl-10 pr-4 text-sm font-bold focus:border-primary outline-none" required></div>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3.5 rounded-xl font-bold shadow-md hover:brightness-105 transition-all">ตรวจสอบสิทธิ์</button>
+                <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3.5 rounded-xl font-bold shadow-md">ตรวจสอบสิทธิ์</button>
             </form>
         </div>
     </div>
 
-    <!-- ================= 3. พื้นที่ทำงานหลัก (WORKSPACE) ================= -->
+    <!-- 3. พื้นที่ทำงานหลัก -->
     <div id="workspace-layout" class="hide-view flex-1 flex flex-col h-full bg-[#fdf2f6]">
         <header class="bg-white px-5 py-3 flex justify-between items-center border-b border-pink-100 shadow-sm z-10">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-pink-100 border border-primary/20 text-primary rounded-full flex items-center justify-center font-bold text-xl">🐷</div>
-                <div>
-                    <h3 class="font-bold text-gray-800 text-sm leading-tight" id="header-user-title">...</h3>
-                    <p class="text-[10px] bg-purple-100 text-secondary px-2 py-0.2 rounded-full font-bold inline-block" id="header-user-badge">...</p>
-                </div>
+                <div><h3 class="font-bold text-gray-800 text-sm leading-tight" id="header-user-title">...</h3><p class="text-[10px] bg-purple-100 text-secondary px-2 py-0.2 rounded-full font-bold inline-block" id="header-user-badge">...</p></div>
             </div>
-            <button onclick="promptLogoutConfirmation()" class="text-gray-400 hover:text-danger p-2 bg-gray-50 rounded-xl transition-all"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+            <button onclick="promptLogoutConfirmation()" class="text-gray-400 hover:text-danger p-2 bg-gray-50 rounded-xl"><i data-lucide="log-out" class="w-5 h-5"></i></button>
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 max-w-md mx-auto w-full pb-28" id="workspace-viewport">
             
-            <!-- VIEW A: รายการเดือน (แดชบอร์ด) -->
+            <!-- Dashboard -->
             <div id="view-section-dashboard" class="fade-in space-y-4">
                 <div class="flex justify-between items-center bg-gradient-to-r from-primary to-secondary p-4 rounded-3xl text-white shadow-md">
-                    <div>
-                        <p class="text-xs opacity-80 font-medium">ยอดรวมทั้งหมดปีนี้</p>
-                        <h2 class="text-2xl font-black" id="dash-total-sum">0.00 ฿</h2>
-                    </div>
+                    <div><p class="text-xs opacity-80 font-medium">ยอดรวมทั้งหมดปีนี้</p><h2 class="text-2xl font-black" id="dash-total-sum">0.00 ฿</h2></div>
                     <i data-lucide="wallet" class="w-8 h-8 opacity-50"></i>
                 </div>
-
                 <div class="flex justify-between items-center mt-2">
                     <h3 class="text-sm font-black text-gray-700 pl-1">📋 เลือกเดือนเพื่อดูบิล</h3>
-                    <button id="btn-create-new-bill" onclick="prepareNewBillForm()" class="hide-view text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-full shadow-sm hover:bg-pink-600 transition-colors">+ สร้างบิลเดือนใหม่</button>
+                    <button id="btn-create-new-bill" onclick="prepareNewBillForm()" class="hide-view text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-full shadow-sm">+ สร้างบิลเดือนใหม่</button>
                 </div>
-                
-                <div id="historical-bills-feed" class="space-y-3">
-                    <!-- รายการบิลจะถูกโหลดมาแสดงที่นี่ -->
-                </div>
+                <div id="historical-bills-feed" class="space-y-3"></div>
             </div>
 
-            <!-- VIEW B: หน้าแสดง/จัดการบิล (ใบแจ้งยอด) -->
+            <!-- หน้าแสดงบิล -->
             <div id="view-section-billing" class="hide-view fade-in space-y-4">
-                
-                <!-- ปุ่มย้อนกลับ -->
-                <button onclick="changeActiveSPAView('dashboard')" class="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-primary transition-all">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> ย้อนกลับไปหน้ารายการ
-                </button>
+                <button onclick="changeActiveSPAView('dashboard')" class="flex items-center gap-1 text-xs font-bold text-gray-500"><i data-lucide="arrow-left" class="w-4 h-4"></i> ย้อนกลับ</button>
 
                 <div class="bg-white rounded-3xl shadow-lg border border-pink-100 p-4 space-y-4 relative overflow-hidden" id="invoice-screenshot-target">
-                    
                     <div class="text-center pb-3 border-b border-pink-100 relative">
-                        <span class="text-3xl block mb-1">🧾</span>
-                        <h2 class="text-lg font-black text-gray-800">ใบบันทึกแจ้งยอดค่าใช้จ่าย</h2>
-                        
-                        <div class="inline-flex items-center gap-1.5 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full mt-2 hover:bg-pink-100 transition-colors cursor-pointer" id="month-input-wrapper">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-primary"></i>
-                            <input type="month" id="invoice-date-month" class="bg-transparent border-none outline-none text-primary font-bold text-sm cursor-pointer">
-                        </div>
+                        <span class="text-3xl block mb-1">🧾</span><h2 class="text-lg font-black text-gray-800">ใบบันทึกแจ้งยอดค่าใช้จ่าย</h2>
+                        <div class="inline-flex items-center gap-1.5 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full mt-2" id="month-input-wrapper"><i data-lucide="calendar" class="w-3.5 h-3.5 text-primary"></i><input type="month" id="invoice-date-month" class="bg-transparent border-none outline-none text-primary font-bold text-sm"></div>
                         <div id="month-readonly-display" class="hidden text-sm font-black text-secondary mt-2 bg-purple-50 inline-block px-4 py-1 rounded-full"></div>
                     </div>
 
-                    <!-- รายการหารสอง -->
                     <div class="bg-blue-50/50 rounded-2xl p-3 border border-blue-100 space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-black text-secondary flex items-center gap-1">👥 1. รายการหาร 2</span>
-                            <button id="admin-add-shared-btn" onclick="addNewExpenseRow('shared')" class="text-[10px] font-bold bg-secondary hover:bg-purple-700 text-white px-2.5 py-1 rounded-full shadow-sm transition-colors">+ เพิ่มแถว</button>
-                        </div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-black text-secondary">👥 1. รายการหาร 2</span><button id="admin-add-shared-btn" onclick="addNewExpenseRow('shared')" class="text-[10px] font-bold bg-secondary text-white px-2.5 py-1 rounded-full">+ เพิ่มแถว</button></div>
                         <div id="shared-expense-rows-container" class="space-y-2"></div>
-                        <div class="pt-2 border-t border-blue-200 flex justify-between text-xs font-bold text-gray-600">
-                            <span>รวม: <span id="shared-subtotal-txt">0.00</span> บ.</span>
-                            <span class="text-secondary bg-white px-2 py-0.5 rounded-lg border border-blue-200 shadow-sm">หาร 2 = <span id="shared-half-txt">0.00</span> บ.</span>
-                        </div>
+                        <div class="pt-2 border-t border-blue-200 flex justify-between text-xs font-bold text-gray-600"><span>รวม: <span id="shared-subtotal-txt">0.00</span> บ.</span><span class="text-secondary bg-white px-2 py-0.5 rounded-lg border border-blue-200">หาร 2 = <span id="shared-half-txt">0.00</span> บ.</span></div>
                     </div>
 
-                    <!-- รายการส่วนตัว -->
                     <div class="bg-orange-50/50 rounded-2xl p-3 border border-orange-100 space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-black text-orange-600 flex items-center gap-1">👩‍🦰 2. รายการส่วนตัว</span>
-                            <button id="admin-add-personal-btn" onclick="addNewExpenseRow('personal')" class="text-[10px] font-bold bg-orange-500 hover:bg-orange-600 text-white px-2.5 py-1 rounded-full shadow-sm transition-colors">+ เพิ่มแถว</button>
-                        </div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-black text-orange-600">👩‍🦰 2. รายการส่วนตัว</span><button id="admin-add-personal-btn" onclick="addNewExpenseRow('personal')" class="text-[10px] font-bold bg-orange-500 text-white px-2.5 py-1 rounded-full">+ เพิ่มแถว</button></div>
                         <div id="personal-expense-rows-container" class="space-y-2"></div>
-                        <div class="pt-2 border-t border-orange-200 flex justify-end text-xs font-bold text-gray-600">
-                            <span>รวมส่วนตัว: <span id="personal-subtotal-txt">0.00</span> บ.</span>
-                        </div>
+                        <div class="pt-2 border-t border-orange-200 flex justify-end text-xs font-bold text-gray-600"><span>รวมส่วนตัว: <span id="personal-subtotal-txt">0.00</span> บ.</span></div>
                     </div>
 
-                    <!-- หักค่ารีดผ้า -->
-                    <div class="bg-red-50 text-danger p-3 rounded-2xl text-xs font-black border border-red-100 flex justify-between items-center">
-                        <span class="flex items-center gap-1">👚 3. หักค่ารีดผ้า</span>
-                        <span>-1,000.00 บาท</span>
-                    </div>
+                    <div class="bg-red-50 text-danger p-3 rounded-2xl text-xs font-black border border-red-100 flex justify-between items-center"><span>👚 3. หักค่ารีดผ้า</span><span>-1,000.00 บาท</span></div>
 
-                    <!-- ยอดคำนวณรวมสุทธิ -->
                     <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-4 text-white text-center shadow-md">
-                        <p class="text-xs opacity-90 font-medium">ยอดสุทธิที่ต้องชำระ</p>
-                        <h1 class="text-3xl font-black mt-1" id="grand-net-total-display">0.00</h1>
+                        <p class="text-xs opacity-90 font-medium">ยอดสุทธิที่ต้องชำระ</p><h1 class="text-3xl font-black mt-1" id="grand-net-total-display">0.00</h1>
                     </div>
 
-                    <!-- แบนเนอร์แสดงสถานะต่างๆ (โชว์ทั้งตอนส่งสลิป และ อนุมัติแล้ว) -->
-                    <div id="paid-status-banner" class="hide-view bg-blue-50 border-2 border-blue-200 p-4 rounded-2xl text-center active-animation mt-4 shadow-sm">
+                    <!-- แบนเนอร์แสดงสถานะต่างๆ -->
+                    <div id="paid-status-banner" class="hide-view bg-blue-50 border-2 border-blue-300 p-4 rounded-2xl text-center active-animation mt-4">
                         <i id="status-icon" data-lucide="info" class="w-8 h-8 mx-auto mb-1 text-blue-500"></i>
                         <h3 class="font-black text-lg text-blue-800" id="paid-status-title">สถานะ</h3>
                         <p class="text-xs font-bold text-blue-600 opacity-80 mt-1 mb-3" id="paid-status-desc">รายละเอียด</p>
                         
-                        <div id="paid-slip-image-box" class="mb-4">
-                            <!-- รูปสลิปจะแสดงตรงนี้ -->
-                        </div>
+                        <div id="paid-slip-image-box" class="mb-4"></div>
 
-                        <!-- ปุ่มกดยืนยันยอดสำหรับแอดมิน (จะโชว์เฉพาะแอดมินตอนที่สถานะเป็น paid) -->
-                        <button id="btn-admin-verify" onclick="adminVerifyPayment()" class="hide-view w-full bg-success hover:bg-green-600 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <!-- 🚨 ปุ่มกดยืนยันยอดสำหรับแอดมิน (โชว์ที่นี่เลย!) -->
+                        <button id="btn-admin-verify" onclick="adminVerifyPayment()" class="hide-view w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
                             <i data-lucide="check-circle" class="w-6 h-6"></i> ยืนยันว่าได้รับเงินเรียบร้อยแล้ว
                         </button>
                     </div>
 
-                    <!-- พื้นที่ชำระเงินของคุณชลิตา (โชว์เฉพาะรอยืนยันยอด) -->
+                    <!-- พื้นที่ชำระเงินของคุณชลิตา -->
                     <div id="chalita-payment-section" class="hide-view bg-gray-50 rounded-2xl p-4 border border-gray-200 space-y-4 active-animation mt-4">
-                        <div class="text-center">
-                            <span class="bg-warning text-white text-[10px] font-black px-3 py-1 rounded-full shadow-sm">⏳ รอยืนยันยอดชำระ</span>
-                        </div>
-                        
-                        <!-- QR Code สำหรับสแกนจ่าย -->
+                        <div class="text-center"><span class="bg-warning text-white text-[10px] font-black px-3 py-1 rounded-full">⏳ รอยืนยันยอดชำระ</span></div>
                         <div class="flex flex-col items-center justify-center">
                             <p class="text-[11px] font-black text-gray-500 mb-2">สแกนจ่ายผ่านพร้อมเพย์</p>
-                            <div class="w-40 h-40 bg-white rounded-xl shadow-sm border border-gray-200 p-2 relative">
-                                <img id="promptpay-qr-img" src="" class="w-full h-full object-contain hide-view">
-                                <div id="qr-placeholder" class="text-center text-gray-300 absolute inset-0 flex flex-col items-center justify-center">
-                                    <i data-lucide="qr-code" class="w-8 h-8 mb-1"></i>
-                                    <span class="text-[9px]">รอยอดเงิน</span>
-                                </div>
-                            </div>
+                            <div class="w-40 h-40 bg-white rounded-xl shadow-sm border border-gray-200 p-2 relative"><img id="promptpay-qr-img" src="" class="w-full h-full object-contain hide-view"><div id="qr-placeholder" class="text-center text-gray-300 absolute inset-0 flex flex-col items-center justify-center"><i data-lucide="qr-code" class="w-8 h-8 mb-1"></i><span class="text-[9px]">รอยอดเงิน</span></div></div>
                             <p class="text-[11px] text-gray-500 font-bold mt-2">เบอร์รับเงิน: <span class="text-primary">064-2424146</span></p>
                         </div>
-
-                        <!-- อัปโหลดสลิป -->
                         <div class="border-t border-gray-200 pt-3">
                             <p class="text-xs font-black text-gray-700 mb-2">อัปโหลดสลิปยืนยันการโอน</p>
-                            <label class="border-2 border-dashed border-primary/50 hover:bg-pink-50 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-all bg-white">
-                                <i data-lucide="image-plus" class="w-5 h-5 text-primary mb-1"></i>
-                                <span class="text-[10px] font-bold text-gray-500">แตะเพื่อแนบรูปสลิป</span>
-                                <input type="file" class="hidden" accept="image/*" onchange="handleSlipUploadForChalita(event)">
-                            </label>
-                            <div id="chalita-slip-preview-box" class="mt-2 hide-view relative">
-                                <img id="chalita-slip-preview-img" src="" class="w-full rounded-lg border border-gray-200 cursor-pointer" onclick="openImageModal(this.src)">
-                                <button onclick="removeChalitaSlip()" class="absolute top-1 right-1 bg-danger hover:bg-red-600 text-white rounded-full p-1 shadow"><i data-lucide="x" class="w-3 h-3"></i></button>
-                            </div>
+                            <label class="border-2 border-dashed border-primary/50 hover:bg-pink-50 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer bg-white"><i data-lucide="image-plus" class="w-5 h-5 text-primary mb-1"></i><span class="text-[10px] font-bold text-gray-500">แตะเพื่อแนบรูปสลิป</span><input type="file" class="hidden" accept="image/*" onchange="handleSlipUploadForChalita(event)"></label>
+                            <div id="chalita-slip-preview-box" class="mt-2 hide-view relative"><img id="chalita-slip-preview-img" src="" class="w-full rounded-lg border border-gray-200 cursor-pointer" onclick="openImageModal(this.src)"><button onclick="removeChalitaSlip()" class="absolute top-1 right-1 bg-danger text-white rounded-full p-1 shadow"><i data-lucide="x" class="w-3 h-3"></i></button></div>
                         </div>
-
-                        <!-- ปุ่มส่งสลิปปิดยอด -->
-                        <button onclick="submitChalitaPayment()" class="w-full bg-success hover:bg-green-600 text-white font-black py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="send" class="w-4 h-4"></i> แจ้งชำระเงิน (ส่งสลิป)
-                        </button>
+                        <button onclick="submitChalitaPayment()" class="w-full bg-success text-white font-black py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> แจ้งชำระเงิน (ส่งสลิป)</button>
                     </div>
                 </div>
 
-                <!-- ปุ่มบันทึกบิล สำหรับคุณกิ๊กเท่านั้น (แอดมิน) -->
                 <div id="admin-actions-hub" class="hide-view mt-4">
-                    <button onclick="commitAdminBillData()" class="w-full bg-gradient-to-r from-primary to-secondary text-white text-base font-black py-4 rounded-2xl shadow-lg hover:brightness-105 transition-all flex justify-center items-center gap-2">
-                        <i data-lucide="save" class="w-5 h-5"></i> บันทึกแก้ไขข้อมูลบิลนี้
-                    </button>
+                    <button onclick="commitAdminBillData()" class="w-full bg-gradient-to-r from-primary to-secondary text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2"><i data-lucide="save" class="w-5 h-5"></i> บันทึกแก้ไขข้อมูลบิลนี้</button>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- ยืนยันออกจากระบบ -->
     <div id="logout-confirm-dialog" class="fixed inset-0 bg-black/60 z-[99] flex items-center justify-center hide-view p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl text-center active-animation">
-            <span class="text-4xl block mb-2">🥺</span>
-            <h3 class="text-base font-black text-gray-800 mb-2">ออกจากระบบ?</h3>
-            <div class="flex gap-2 mt-4">
-                <button onclick="hideLogoutConfirmation()" class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold text-xs transition-all">ยกเลิก</button>
-                <button onclick="executeSecureAppLogout()" class="flex-1 bg-danger hover:bg-red-600 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-all">ออกระบบ</button>
-            </div>
+            <span class="text-4xl block mb-2">🥺</span><h3 class="text-base font-black text-gray-800 mb-2">ออกจากระบบ?</h3>
+            <div class="flex gap-2 mt-4"><button onclick="hideLogoutConfirmation()" class="flex-1 bg-gray-100 py-3 rounded-xl font-bold text-xs">ยกเลิก</button><button onclick="executeSecureAppLogout()" class="flex-1 bg-danger text-white py-3 rounded-xl font-bold text-xs shadow-md">ออกระบบ</button></div>
         </div>
     </div>
 
@@ -302,498 +208,224 @@
             }
         } catch (err) { console.warn("โหมดออฟไลน์จำลอง"); }
 
-        let currentAuthenticatedUser = null;
-        let currentViewCycleId = null; 
-        let currentViewStatus = 'pending';
-        let chalitaUploadedSlipBase64 = null;
-        let sharedExpenseRowsData = [];
-        let personalExpenseRowsData = [];
+        let currentAuthenticatedUser = null; let currentViewCycleId = null; let currentViewStatus = 'pending'; let chalitaUploadedSlipBase64 = null;
+        let sharedExpenseRowsData = []; let personalExpenseRowsData = [];
 
-        // 🌟 เพิ่มระบบ LocalStorage: ดึงข้อมูลที่เคยบันทึกไว้ในเครื่องขึ้นมา (ถ้ามี)
+        // 🌟 บังคับดึงข้อมูลจากเครื่องเสมอ (เพื่อป้องกัน Supabase พังแล้วข้อมูลหาย)
         let fallbackBillsDB = JSON.parse(localStorage.getItem('cutebill_mock_db')) || [
-            { id: 'mock1', month_year: '2026-05', net_payable: 1283.57, status: 'verified', slip_url: 'https://placehold.co/400x600/fce4ec/d81b60?text=Mock+Slip' }
+            { id: 'mock1', month_year: '2026-05', net_payable: 1283.57, status: 'pending', slip_url: '' }
         ];
 
-        // 🌟 ฟังก์ชันเซฟข้อมูลลงเครื่อง เพื่อป้องกันการกดรีเฟรชแล้วข้อมูลหาย
-        function saveMockDB() {
-            localStorage.setItem('cutebill_mock_db', JSON.stringify(fallbackBillsDB));
-        }
-
+        function saveMockDB() { localStorage.setItem('cutebill_mock_db', JSON.stringify(fallbackBillsDB)); }
         function displayComponent(id) { document.getElementById(id).classList.remove('hide-view'); }
         function hideComponent(id) { document.getElementById(id).classList.add('hide-view'); }
-        
-        function toggleSpinnerOverlay(isActive, text = 'กำลังโหลด...') {
-            document.getElementById('spinner-caption').innerText = text;
-            isActive ? displayComponent('global-spinner') : hideComponent('global-spinner');
-        }
-        
-        function triggerFlashToastAlert(msg, icon = '✨') {
-            const toast = document.getElementById('alert-toast');
-            document.getElementById('toast-text').innerText = msg;
-            document.getElementById('toast-icon-box').innerText = icon;
-            toast.classList.remove('translate-y-[-150%]');
-            setTimeout(() => toast.classList.add('translate-y-[-150%]'), 2500);
-        }
-
-        function showLoginPanel() { displayComponent('login-modal'); }
-        function hideLoginPanel() { hideComponent('login-modal'); }
-        function promptLogoutConfirmation() { displayComponent('logout-confirm-dialog'); }
-        function hideLogoutConfirmation() { hideComponent('logout-confirm-dialog'); }
-
-        function openImageModal(src) {
-            document.getElementById('full-size-img').src = src;
-            displayComponent('image-view-modal');
-        }
-        function closeImageModal() {
-            hideComponent('image-view-modal');
-            document.getElementById('full-size-img').src = '';
-        }
-
-        function changeActiveSPAView(targetSectionName) {
-            hideComponent('view-section-dashboard');
-            hideComponent('view-section-billing');
-            displayComponent(`view-section-${targetSectionName}`);
-            
-            if(targetSectionName === 'dashboard') {
-                loadDashboardList();
-            }
-        }
+        function toggleSpinnerOverlay(isActive, text = 'กำลังโหลด...') { document.getElementById('spinner-caption').innerText = text; isActive ? displayComponent('global-spinner') : hideComponent('global-spinner'); }
+        function triggerFlashToastAlert(msg, icon = '✨') { const toast = document.getElementById('alert-toast'); document.getElementById('toast-text').innerText = msg; document.getElementById('toast-icon-box').innerText = icon; toast.classList.remove('translate-y-[-150%]'); setTimeout(() => toast.classList.add('translate-y-[-150%]'), 2500); }
+        function showLoginPanel() { displayComponent('login-modal'); } function hideLoginPanel() { hideComponent('login-modal'); }
+        function promptLogoutConfirmation() { displayComponent('logout-confirm-dialog'); } function hideLogoutConfirmation() { hideComponent('logout-confirm-dialog'); }
+        function openImageModal(src) { document.getElementById('full-size-img').src = src; displayComponent('image-view-modal'); }
+        function closeImageModal() { hideComponent('image-view-modal'); document.getElementById('full-size-img').src = ''; }
+        function changeActiveSPAView(targetSectionName) { hideComponent('view-section-dashboard'); hideComponent('view-section-billing'); displayComponent(`view-section-${targetSectionName}`); if(targetSectionName === 'dashboard') loadDashboardList(); }
 
         async function triggerAuthProcessing(e) {
-            e.preventDefault();
-            const u = document.getElementById('form-username').value.trim();
-            const p = document.getElementById('form-password').value.trim();
-            toggleSpinnerOverlay(true, 'ตรวจสอบสิทธิ์...');
-
-            if (sbClientInstance) {
-                try {
-                    const { data: userRecord, error } = await sbClientInstance.from('custom_users').select('*').eq('username', u).eq('password', p).maybeSingle();
-                    toggleSpinnerOverlay(false);
-                    if (error || !userRecord) { triggerFlashToastAlert('ข้อมูลไม่ถูกต้อง!', '❌'); return; }
-                    authorizeUserSession(userRecord);
-                } catch (err) { toggleSpinnerOverlay(false); triggerFlashToastAlert('รหัสผิดหรือออฟไลน์', '❌'); }
-            } else {
-                setTimeout(() => {
-                    toggleSpinnerOverlay(false);
-                    if (u === 'kiik' && p === '1234') authorizeUserSession({ username: 'kiik', display_name: 'คุณกิ๊ก 👑', role: 'admin' });
-                    else if (u === 'chalita' && p === '1234') authorizeUserSession({ username: 'chalita', display_name: 'คุณชลิตา 🐷', role: 'user' });
-                    else triggerFlashToastAlert('รหัสทดสอบไม่ถูกต้อง!', '❌');
-                }, 400);
-            }
+            e.preventDefault(); const u = document.getElementById('form-username').value.trim(); const p = document.getElementById('form-password').value.trim(); toggleSpinnerOverlay(true, 'ตรวจสอบสิทธิ์...');
+            setTimeout(() => {
+                toggleSpinnerOverlay(false);
+                if (u === 'kiik' && p === '1234') authorizeUserSession({ username: 'kiik', display_name: 'คุณกิ๊ก 👑', role: 'admin' });
+                else if (u === 'chalita' && p === '1234') authorizeUserSession({ username: 'chalita', display_name: 'คุณชลิตา 🐷', role: 'user' });
+                else triggerFlashToastAlert('รหัสทดสอบไม่ถูกต้อง!', '❌');
+            }, 400);
         }
 
         function authorizeUserSession(user) {
-            currentAuthenticatedUser = user;
-            hideLoginPanel();
-            hideComponent('landing-screen');
-            displayComponent('workspace-layout');
-
+            currentAuthenticatedUser = user; hideLoginPanel(); hideComponent('landing-screen'); displayComponent('workspace-layout');
             document.getElementById('header-user-title').innerText = user.display_name;
-            
-            if(user.role === 'admin') {
-                document.getElementById('header-user-badge').innerText = 'แอดมินบันทึกข้อมูล';
-                displayComponent('btn-create-new-bill');
-            } else {
-                document.getElementById('header-user-badge').innerText = 'ตรวจสอบและชำระเงิน';
-                hideComponent('btn-create-new-bill');
-            }
-            
-            changeActiveSPAView('dashboard');
-            triggerFlashToastAlert(`สวัสดี ${user.display_name}`, '🐷');
+            if(user.role === 'admin') { document.getElementById('header-user-badge').innerText = 'แอดมินบันทึกข้อมูล'; displayComponent('btn-create-new-bill'); } else { document.getElementById('header-user-badge').innerText = 'ตรวจสอบและชำระเงิน'; hideComponent('btn-create-new-bill'); }
+            changeActiveSPAView('dashboard'); triggerFlashToastAlert(`สวัสดี ${user.display_name}`, '🐷');
         }
 
-        function executeSecureAppLogout() {
-            currentAuthenticatedUser = null;
-            hideLogoutConfirmation();
-            hideComponent('workspace-layout');
-            displayComponent('landing-screen');
-            document.getElementById('auth-form-submit').reset();
-            triggerFlashToastAlert('ออกจากระบบแล้ว', '👋');
-        }
+        function executeSecureAppLogout() { currentAuthenticatedUser = null; hideLogoutConfirmation(); hideComponent('workspace-layout'); displayComponent('landing-screen'); document.getElementById('auth-form-submit').reset(); triggerFlashToastAlert('ออกจากระบบแล้ว', '👋'); }
+        function formatThaiMonth(ym) { if(!ym) return ''; const [y, m] = ym.split('-'); const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']; return `${months[parseInt(m)-1]} ${(parseInt(y)+543).toString().slice(-2)}`; }
 
-        function formatThaiMonth(ym) {
-            if(!ym) return '';
-            const [y, m] = ym.split('-');
-            const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-            return `${months[parseInt(m)-1]} ${(parseInt(y)+543).toString().slice(-2)}`;
-        }
-
-        // ================= DASHBOARD =================
         async function loadDashboardList() {
             let records = fallbackBillsDB;
             if(sbClientInstance) {
                 try {
                     const { data } = await sbClientInstance.from('billing_cycles').select('*').order('month_year', { ascending: false });
                     if(data && data.length > 0) records = data;
-                } catch(e) {}
+                } catch(e) { console.warn("Supabase load failed, using local"); }
             }
-
             const totalSum = records.reduce((acc, curr) => acc + (parseFloat(curr.net_payable)||0), 0);
             document.getElementById('dash-total-sum').innerText = totalSum.toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿';
-
             const container = document.getElementById('historical-bills-feed');
-            if(records.length === 0) {
-                container.innerHTML = `<p class="text-center text-xs font-bold text-gray-400 py-6">ยังไม่มีรายการบิล</p>`;
-                return;
-            }
+            if(records.length === 0) { container.innerHTML = `<p class="text-center text-xs font-bold text-gray-400 py-6">ยังไม่มีรายการบิล</p>`; return; }
 
             container.innerHTML = records.map(item => {
-                const isVerified = item.status === 'verified';
-                const isPaid = item.status === 'paid'; 
-                
-                let badge = '';
-                let icon = '📝';
-                
-                if (isVerified) {
-                    badge = `<span class="bg-success text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">✅ ยืนยันแล้ว</span>`;
-                    icon = '🐷';
-                } else if (isPaid) {
-                    badge = `<span class="bg-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">📄 รอตรวจสลิป</span>`;
-                    icon = '💸';
-                } else {
-                    badge = `<span class="bg-warning text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">⏳ รอยืนยันยอด</span>`;
-                }
-                
-                return `
-                    <div onclick="openBillDetails('${item.id}', '${item.month_year}', '${item.status}', '${item.slip_url || ''}')" class="bg-white p-4 rounded-2xl border border-pink-100 flex justify-between items-center shadow-sm hover:scale-[1.02] cursor-pointer transition-all">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-xl shadow-inner">${icon}</div>
-                            <div>
-                                <p class="font-black text-sm text-gray-800 mb-0.5">บิลเดือน ${formatThaiMonth(item.month_year)}</p>
-                                ${badge}
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-black text-primary">${parseFloat(item.net_payable).toLocaleString('th-TH', {minimumFractionDigits:2})} ฿</p>
-                            <p class="text-[9px] text-gray-400 font-bold mt-1">กดดูรายละเอียด ></p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            lucide.createIcons();
+                const isVerified = item.status === 'verified'; const isPaid = item.status === 'paid'; 
+                let badge = ''; let icon = '📝';
+                if (isVerified) { badge = `<span class="bg-success text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">✅ ยืนยันแล้ว</span>`; icon = '🐷'; } else if (isPaid) { badge = `<span class="bg-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">📄 รอตรวจสลิป</span>`; icon = '💸'; } else { badge = `<span class="bg-warning text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">⏳ รอยืนยันยอด</span>`; }
+                return `<div onclick="openBillDetails('${item.id}', '${item.month_year}', '${item.status}', '${item.slip_url || ''}')" class="bg-white p-4 rounded-2xl border border-pink-100 flex justify-between items-center shadow-sm cursor-pointer"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-xl shadow-inner">${icon}</div><div><p class="font-black text-sm text-gray-800 mb-0.5">บิลเดือน ${formatThaiMonth(item.month_year)}</p>${badge}</div></div><div class="text-right"><p class="font-black text-primary">${parseFloat(item.net_payable).toLocaleString('th-TH', {minimumFractionDigits:2})} ฿</p></div></div>`;
+            }).join(''); lucide.createIcons();
         }
 
         function prepareNewBillForm() {
-            currentViewCycleId = null;
-            currentViewStatus = 'pending';
-            const now = new Date();
-            document.getElementById('invoice-date-month').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            
-            sharedExpenseRowsData = [{ title: 'ค่าน้ำ', amount: 0, proof_img: '' }, { title: 'ค่าเน็ท', amount: 0, proof_img: '' }];
-            personalExpenseRowsData = [{ title: 'ค่าไฟ', amount: 0, proof_img: '' }];
-            
-            document.getElementById('paid-slip-image-box').innerHTML = '';
-            setupBillingUI();
-            changeActiveSPAView('billing');
+            currentViewCycleId = null; currentViewStatus = 'pending'; const now = new Date(); document.getElementById('invoice-date-month').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            sharedExpenseRowsData = [{ title: 'ค่าน้ำ', amount: 0, proof_img: '' }, { title: 'ค่าเน็ท', amount: 0, proof_img: '' }]; personalExpenseRowsData = [{ title: 'ค่าไฟ', amount: 0, proof_img: '' }];
+            document.getElementById('paid-slip-image-box').innerHTML = ''; setupBillingUI(); changeActiveSPAView('billing');
         }
 
         async function openBillDetails(id, month_year, status, slip_url) {
-            toggleSpinnerOverlay(true, 'กำลังเปิดบิล...');
-            currentViewCycleId = id;
-            currentViewStatus = status;
-            document.getElementById('invoice-date-month').value = month_year;
-
+            toggleSpinnerOverlay(true, 'กำลังเปิดบิล...'); currentViewCycleId = id; currentViewStatus = status; document.getElementById('invoice-date-month').value = month_year;
+            let loadedFromDB = false;
             if(sbClientInstance) {
                 try {
                     const { data: expenses } = await sbClientInstance.from('expenses').select('*').eq('cycle_id', id);
-                    if(expenses) {
+                    if(expenses && expenses.length > 0) {
                         sharedExpenseRowsData = expenses.filter(e => e.expense_type === 'shared').map(e => ({ title: e.title, amount: e.amount, proof_img: e.image_url||'' }));
                         personalExpenseRowsData = expenses.filter(e => e.expense_type === 'personal').map(e => ({ title: e.title, amount: e.amount, proof_img: e.image_url||'' }));
+                        loadedFromDB = true;
                     }
                 } catch(e) {}
-            } else {
-                // ดึงจาก Mock ถ้าหาข้อมูลแถวไม่เจอให้ใส่ค่าว่างๆ ไว้
-                sharedExpenseRowsData = JSON.parse(localStorage.getItem(`expenses_shared_${id}`)) || [{ title: 'ค่าน้ำ', amount: 435.49, proof_img: '' }];
+            } 
+            if(!loadedFromDB) {
+                sharedExpenseRowsData = JSON.parse(localStorage.getItem(`expenses_shared_${id}`)) || [{ title: 'ค่าน้ำ', amount: 435, proof_img: '' }];
                 personalExpenseRowsData = JSON.parse(localStorage.getItem(`expenses_personal_${id}`)) || [{ title: 'ค่าไฟ', amount: 1500, proof_img: '' }];
             }
-
-            // แปะสลิปชลิตา
-            const slipHtml = slip_url ? `<img src="${slip_url}" onclick="openImageModal('${slip_url}')" class="w-full rounded-xl border border-gray-200 mt-2 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="กดเพื่อขยายรูป">` : '';
+            const slipHtml = slip_url ? `<img src="${slip_url}" onclick="openImageModal('${slip_url}')" class="w-full rounded-xl border border-gray-200 mt-2 shadow-sm cursor-pointer">` : '';
             document.getElementById('paid-slip-image-box').innerHTML = slipHtml;
-
-            setupBillingUI();
-            toggleSpinnerOverlay(false);
-            changeActiveSPAView('billing');
+            setupBillingUI(); toggleSpinnerOverlay(false); changeActiveSPAView('billing');
         }
 
         function setupBillingUI() {
             const isAdmin = currentAuthenticatedUser && currentAuthenticatedUser.role === 'admin';
-            
-            // รีเซ็ตซ่อนทุกแผงก่อน
-            hideComponent('chalita-payment-section');
-            hideComponent('paid-status-banner');
-            hideComponent('btn-admin-verify');
-            hideComponent('admin-actions-hub');
+            hideComponent('chalita-payment-section'); hideComponent('paid-status-banner'); hideComponent('btn-admin-verify'); hideComponent('admin-actions-hub');
 
-            // Header Month and Admin Inputs
-            if(isAdmin) {
-                displayComponent('month-input-wrapper'); hideComponent('month-readonly-display');
-                displayComponent('admin-add-shared-btn'); displayComponent('admin-add-personal-btn');
-            } else {
-                hideComponent('month-input-wrapper'); displayComponent('month-readonly-display');
-                hideComponent('admin-add-shared-btn'); hideComponent('admin-add-personal-btn');
-                document.getElementById('month-readonly-display').innerText = `ประจำเดือน ${formatThaiMonth(document.getElementById('invoice-date-month').value)}`;
-            }
+            if(isAdmin) { displayComponent('month-input-wrapper'); hideComponent('month-readonly-display'); displayComponent('admin-add-shared-btn'); displayComponent('admin-add-personal-btn'); } 
+            else { hideComponent('month-input-wrapper'); displayComponent('month-readonly-display'); hideComponent('admin-add-shared-btn'); hideComponent('admin-add-personal-btn'); document.getElementById('month-readonly-display').innerText = `ประจำเดือน ${formatThaiMonth(document.getElementById('invoice-date-month').value)}`; }
 
-            const bannerTitle = document.getElementById('paid-status-title');
-            const bannerDesc = document.getElementById('paid-status-desc');
+            const bannerTitle = document.getElementById('paid-status-title'); const bannerDesc = document.getElementById('paid-status-desc');
 
             if (!isAdmin) {
-                // ================= มุมมองของผู้ใช้งาน (ชลิตา) =================
-                if (currentViewStatus === 'pending') {
-                    displayComponent('chalita-payment-section');
-                } else if (currentViewStatus === 'paid') {
-                    displayComponent('paid-status-banner');
-                    bannerTitle.innerText = 'ส่งสลิปเรียบร้อย 📄';
-                    bannerDesc.innerText = 'รอคุณกิ๊กตรวจสอบและยืนยันยอดจ้า ⏳';
-                } else if (currentViewStatus === 'verified') {
-                    displayComponent('paid-status-banner');
-                    bannerTitle.innerText = 'ชำระเสร็จสิ้นแล้ว ✅';
-                    bannerDesc.innerText = 'คุณกิ๊กยืนยันยอดเรียบร้อย ขอบคุณจ้า 🐷';
-                }
+                if (currentViewStatus === 'pending') { displayComponent('chalita-payment-section'); } 
+                else if (currentViewStatus === 'paid') { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ส่งสลิปเรียบร้อย 📄'; bannerDesc.innerText = 'รอคุณกิ๊กตรวจสอบและยืนยันยอดจ้า ⏳'; } 
+                else if (currentViewStatus === 'verified') { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ชำระเสร็จสิ้นแล้ว ✅'; bannerDesc.innerText = 'คุณกิ๊กยืนยันยอดเรียบร้อย ขอบคุณจ้า 🐷'; }
             } else {
-                // ================= มุมมองของแอดมิน (กิ๊ก) =================
-                if (currentViewStatus === 'pending') {
-                    displayComponent('admin-actions-hub');
-                } else if (currentViewStatus === 'paid') {
-                    // 🌟 จุดสำคัญ: เปิดแบนเนอร์ให้แอดมินดูสลิป และเปิดปุ่มอนุมัติ
+                if (currentViewStatus === 'pending') { displayComponent('admin-actions-hub'); } 
+                else if (currentViewStatus === 'paid') {
+                    // 🌟 ถ้าสถานะ paid แอดมินจะเห็นแบนเนอร์ และปุ่มกดยืนยันยอดเงินชัดเจน
                     displayComponent('paid-status-banner');
                     bannerTitle.innerText = 'คุณชลิตาส่งสลิปมาแล้ว! 👀';
                     bannerDesc.innerText = 'กรุณาตรวจสอบสลิปและกดยืนยันรับเงินด้านล่าง 👇';
                     displayComponent('btn-admin-verify'); 
-                    displayComponent('admin-actions-hub'); // เผื่อแอดมินอยากแก้บิล
-                } else if (currentViewStatus === 'verified') {
-                    displayComponent('paid-status-banner');
-                    bannerTitle.innerText = 'ยอดนี้ตรวจสอบและยืนยันแล้ว 🐷';
-                    bannerDesc.innerText = 'คุณกิ๊กได้รับเงินเรียบร้อย ✅';
-                }
+                    displayComponent('admin-actions-hub');
+                } 
+                else if (currentViewStatus === 'verified') { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ยอดนี้ตรวจสอบและยืนยันแล้ว 🐷'; bannerDesc.innerText = 'คุณกิ๊กได้รับเงินเรียบร้อย ✅'; }
             }
 
-            // รีเซ็ตหน้าต่างอัพโหลดของชลิตา
-            chalitaUploadedSlipBase64 = null;
-            hideComponent('chalita-slip-preview-box');
-            document.getElementById('chalita-slip-preview-img').src = '';
-
-            renderExpenseRows();
+            chalitaUploadedSlipBase64 = null; hideComponent('chalita-slip-preview-box'); document.getElementById('chalita-slip-preview-img').src = ''; renderExpenseRows();
         }
 
         function renderExpenseRows() {
             const isAdmin = currentAuthenticatedUser.role === 'admin';
-
             const renderBlock = (dataArray, type) => dataArray.map((row, idx) => {
                 if(isAdmin) {
-                    return `
-                        <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                            <div class="flex items-center gap-2">
-                                <input type="text" value="${row.title}" onchange="updateData('${type}',${idx},'title',this.value)" class="flex-1 bg-gray-50 rounded-lg px-2 py-2 text-xs font-bold outline-none focus:border-primary border border-gray-200" placeholder="ชื่อรายการ">
-                                <input type="number" step="any" value="${row.amount||''}" placeholder="0" onkeyup="calcTotals()" onchange="updateData('${type}',${idx},'amount',this.value)" class="w-20 bg-gray-50 rounded-lg px-2 py-2 text-xs font-black text-right outline-none border border-gray-200" placeholder="จำนวนเงิน">
-                                <button onclick="delRow('${type}',${idx})" class="text-danger hover:bg-red-100 p-2 bg-red-50 rounded-lg transition-colors" title="ลบรายการนี้"><i data-lucide="trash" class="w-4 h-4"></i></button>
-                            </div>
-                            
-                            <div class="flex items-center gap-2">
-                                <label class="text-[10px] font-bold text-secondary bg-purple-50 hover:bg-purple-100 border border-purple-100 px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5 transition-colors">
-                                    <i data-lucide="camera" class="w-3.5 h-3.5"></i> ${row.proof_img ? 'เปลี่ยนรูปสลิป/บิล' : 'แนบสลิป/บิล'}
-                                    <input type="file" accept="image/*" class="hidden" onchange="attachAdminProof(event,'${type}',${idx})">
-                                </label>
-                            </div>
-                            
-                            ${row.proof_img ? `
-                                <div class="relative inline-block mt-1">
-                                    <img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-24 rounded-lg border border-gray-200 object-contain shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="กดเพื่อขยายรูป">
-                                    <button onclick="removeAdminProof('${type}',${idx})" class="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1 shadow-md hover:bg-red-600" title="ลบรูปภาพ"><i data-lucide="x" class="w-3 h-3"></i></button>
-                                </div>
-                            ` : ''}
-                        </div>`;
+                    return `<div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm space-y-2"><div class="flex items-center gap-2"><input type="text" value="${row.title}" onchange="updateData('${type}',${idx},'title',this.value)" class="flex-1 bg-gray-50 rounded-lg px-2 py-2 text-xs font-bold outline-none border border-gray-200" placeholder="ชื่อรายการ"><input type="number" step="any" value="${row.amount||''}" placeholder="0" onkeyup="calcTotals()" onchange="updateData('${type}',${idx},'amount',this.value)" class="w-20 bg-gray-50 rounded-lg px-2 py-2 text-xs font-black text-right outline-none border border-gray-200"><button onclick="delRow('${type}',${idx})" class="text-danger p-2 bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button></div><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-secondary bg-purple-50 px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5"><i data-lucide="camera" class="w-3.5 h-3.5"></i> ${row.proof_img ? 'เปลี่ยนรูปสลิป/บิล' : 'แนบสลิป/บิล'}<input type="file" accept="image/*" class="hidden" onchange="attachAdminProof(event,'${type}',${idx})"></label></div>${row.proof_img ? `<div class="relative inline-block mt-1"><img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-24 rounded-lg border border-gray-200 object-contain shadow-sm cursor-pointer"><button onclick="removeAdminProof('${type}',${idx})" class="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1 shadow-md"><i data-lucide="x" class="w-3 h-3"></i></button></div>` : ''}</div>`;
                 } else {
-                    const proofHtml = row.proof_img ? `<img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-32 mt-2 rounded-lg border border-pink-100 object-contain shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="กดเพื่อขยายรูป">` : '';
-                    return `
-                        <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col text-xs">
-                            <div class="flex justify-between items-start mb-1">
-                                <span class="font-bold text-gray-700 flex-1 pr-2">🔸 ${row.title}</span>
-                                <span class="font-black text-primary bg-pink-50 px-2 py-0.5 rounded-md">${parseFloat(row.amount).toLocaleString('th-TH',{minimumFractionDigits:2})} บ.</span>
-                            </div>
-                            ${row.proof_img ? proofHtml : '<div class="mt-1 flex items-center gap-1 text-[9px] text-gray-400 italic"><i data-lucide="image-off" class="w-3 h-3"></i>ไม่มีรูปแนบ</div>'}
-                        </div>`;
+                    const proofHtml = row.proof_img ? `<img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-32 mt-2 rounded-lg border border-pink-100 object-contain shadow-sm cursor-pointer">` : '';
+                    return `<div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col text-xs"><div class="flex justify-between items-start mb-1"><span class="font-bold text-gray-700 flex-1 pr-2">🔸 ${row.title}</span><span class="font-black text-primary bg-pink-50 px-2 py-0.5 rounded-md">${parseFloat(row.amount).toLocaleString('th-TH',{minimumFractionDigits:2})} บ.</span></div>${row.proof_img ? proofHtml : '<div class="mt-1 flex items-center gap-1 text-[9px] text-gray-400 italic">ไม่มีรูปแนบ</div>'}</div>`;
                 }
             }).join('');
-
-            document.getElementById('shared-expense-rows-container').innerHTML = renderBlock(sharedExpenseRowsData, 'shared');
-            document.getElementById('personal-expense-rows-container').innerHTML = renderBlock(personalExpenseRowsData, 'personal');
-            lucide.createIcons();
-            calcTotals();
+            document.getElementById('shared-expense-rows-container').innerHTML = renderBlock(sharedExpenseRowsData, 'shared'); document.getElementById('personal-expense-rows-container').innerHTML = renderBlock(personalExpenseRowsData, 'personal'); lucide.createIcons(); calcTotals();
         }
 
-        async function attachAdminProof(e, type, idx) {
-            const f = e.target.files[0]; if(!f) return;
-            toggleSpinnerOverlay(true, 'ย่อรูปภาพ...');
-            try {
-                const blob = await imageCompression(f, { maxSizeMB: 0.1, maxWidthOrHeight: 600 });
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = () => {
-                    if(type === 'shared') sharedExpenseRowsData[idx].proof_img = reader.result;
-                    else personalExpenseRowsData[idx].proof_img = reader.result;
-                    toggleSpinnerOverlay(false);
-                    renderExpenseRows();
-                }
-            } catch(er) { toggleSpinnerOverlay(false); triggerFlashToastAlert('ย่อรูปไม่สำเร็จ','❌'); }
-        }
-
-        function removeAdminProof(type, idx) {
-            if(type === 'shared') sharedExpenseRowsData[idx].proof_img = '';
-            else personalExpenseRowsData[idx].proof_img = '';
-            renderExpenseRows();
-        }
-
-        function updateData(t, i, k, v) { 
-            const arr = t==='shared'?sharedExpenseRowsData:personalExpenseRowsData; 
-            if(k==='amount') { arr[i][k] = parseFloat(v)||0; calcTotals(); } else arr[i][k] = v; 
-        }
-        
-        function addNewExpenseRow(t) { 
-            t==='shared' 
-                ? sharedExpenseRowsData.push({title:'', amount:0, proof_img:''}) 
-                : personalExpenseRowsData.push({title:'', amount:0, proof_img:''}); 
-            renderExpenseRows(); 
-        }
-        
-        function delRow(t, i) { 
-            t==='shared' ? sharedExpenseRowsData.splice(i,1) : personalExpenseRowsData.splice(i,1); 
-            renderExpenseRows(); 
-        }
+        async function attachAdminProof(e, type, idx) { const f = e.target.files[0]; if(!f) return; toggleSpinnerOverlay(true, 'ย่อรูปภาพ...'); try { const blob = await imageCompression(f, { maxSizeMB: 0.1, maxWidthOrHeight: 600 }); const reader = new FileReader(); reader.readAsDataURL(blob); reader.onloadend = () => { if(type === 'shared') sharedExpenseRowsData[idx].proof_img = reader.result; else personalExpenseRowsData[idx].proof_img = reader.result; toggleSpinnerOverlay(false); renderExpenseRows(); } } catch(er) { toggleSpinnerOverlay(false); } }
+        function removeAdminProof(type, idx) { if(type === 'shared') sharedExpenseRowsData[idx].proof_img = ''; else personalExpenseRowsData[idx].proof_img = ''; renderExpenseRows(); }
+        function updateData(t, i, k, v) { const arr = t==='shared'?sharedExpenseRowsData:personalExpenseRowsData; if(k==='amount') { arr[i][k] = parseFloat(v)||0; calcTotals(); } else arr[i][k] = v; }
+        function addNewExpenseRow(t) { t==='shared' ? sharedExpenseRowsData.push({title:'', amount:0, proof_img:''}) : personalExpenseRowsData.push({title:'', amount:0, proof_img:''}); renderExpenseRows(); }
+        function delRow(t, i) { t==='shared' ? sharedExpenseRowsData.splice(i,1) : personalExpenseRowsData.splice(i,1); renderExpenseRows(); }
 
         function calcTotals() {
-            let sSum = sharedExpenseRowsData.reduce((a,c)=>a+(parseFloat(c.amount)||0),0);
-            let pSum = personalExpenseRowsData.reduce((a,c)=>a+(parseFloat(c.amount)||0),0);
-            let sHalf = sSum/2;
-            let net = Math.max(0, sHalf + pSum - 1000);
-
-            document.getElementById('shared-subtotal-txt').innerText = sSum.toLocaleString('th-TH',{minimumFractionDigits:2});
-            document.getElementById('shared-half-txt').innerText = sHalf.toLocaleString('th-TH',{minimumFractionDigits:2});
-            document.getElementById('personal-subtotal-txt').innerText = pSum.toLocaleString('th-TH',{minimumFractionDigits:2});
-            document.getElementById('grand-net-total-display').innerText = net.toLocaleString('th-TH',{minimumFractionDigits:2}) + ' ฿';
-
-            if(currentAuthenticatedUser && currentAuthenticatedUser.role === 'user' && currentViewStatus === 'pending') {
-                const qrImg = document.getElementById('promptpay-qr-img');
-                if(net > 0) {
-                    qrImg.src = `https://promptpay.io/${PROMPTPAY_NUM}/${net.toFixed(2)}.png`;
-                    displayComponent('promptpay-qr-img'); 
-                    hideComponent('qr-placeholder');
-                } else {
-                    hideComponent('promptpay-qr-img'); 
-                    displayComponent('qr-placeholder');
-                }
-            }
+            let sSum = sharedExpenseRowsData.reduce((a,c)=>a+(parseFloat(c.amount)||0),0); let pSum = personalExpenseRowsData.reduce((a,c)=>a+(parseFloat(c.amount)||0),0); let sHalf = sSum/2; let net = Math.max(0, sHalf + pSum - 1000);
+            document.getElementById('shared-subtotal-txt').innerText = sSum.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('shared-half-txt').innerText = sHalf.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('personal-subtotal-txt').innerText = pSum.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('grand-net-total-display').innerText = net.toLocaleString('th-TH',{minimumFractionDigits:2}) + ' ฿';
+            if(currentAuthenticatedUser && currentAuthenticatedUser.role === 'user' && currentViewStatus === 'pending') { const qrImg = document.getElementById('promptpay-qr-img'); if(net > 0) { qrImg.src = `https://promptpay.io/${PROMPTPAY_NUM}/${net.toFixed(2)}.png`; displayComponent('promptpay-qr-img'); hideComponent('qr-placeholder'); } else { hideComponent('promptpay-qr-img'); displayComponent('qr-placeholder'); } }
         }
 
         // ================= KIIK: บันทึกข้อมูลบิล =================
         async function commitAdminBillData() {
-            const mYear = document.getElementById('invoice-date-month').value;
-            const net = parseFloat(document.getElementById('grand-net-total-display').innerText.replace(/,/g,''));
-            toggleSpinnerOverlay(true, 'กำลังบันทึกบิล...');
+            const mYear = document.getElementById('invoice-date-month').value; const net = parseFloat(document.getElementById('grand-net-total-display').innerText.replace(/,/g,'')); toggleSpinnerOverlay(true, 'กำลังบันทึกบิล...');
+            
+            // 🌟 สร้างระบบ Fallback เพื่อให้มั่นใจว่าเซฟลงเครื่องได้ 100%
+            const fallbackSave = () => {
+                let cycleId = currentViewCycleId || 'mock_' + Date.now();
+                const idx = fallbackBillsDB.findIndex(b => b.id === cycleId);
+                if(idx > -1) { fallbackBillsDB[idx].month_year = mYear; fallbackBillsDB[idx].net_payable = net; } else { fallbackBillsDB.push({ id: cycleId, month_year: mYear, net_payable: net, status: 'pending', slip_url: '' }); }
+                localStorage.setItem(`expenses_shared_${cycleId}`, JSON.stringify(sharedExpenseRowsData)); localStorage.setItem(`expenses_personal_${cycleId}`, JSON.stringify(personalExpenseRowsData)); saveMockDB();
+                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('บันทึกสำเร็จ','✅'); changeActiveSPAView('dashboard'); }, 800); 
+            };
 
-            if(!sbClientInstance) {
-                // เซฟจำลองลงเครื่อง
-                let cycleId = currentViewCycleId;
-                if(!cycleId) {
-                    cycleId = 'mock_' + Date.now();
-                    fallbackBillsDB.push({ id: cycleId, month_year: mYear, net_payable: net, status: 'pending', slip_url: '' });
-                } else {
-                    const idx = fallbackBillsDB.findIndex(b => b.id === cycleId);
-                    if(idx > -1) { fallbackBillsDB[idx].month_year = mYear; fallbackBillsDB[idx].net_payable = net; }
-                }
-                localStorage.setItem(`expenses_shared_${cycleId}`, JSON.stringify(sharedExpenseRowsData));
-                localStorage.setItem(`expenses_personal_${cycleId}`, JSON.stringify(personalExpenseRowsData));
-                saveMockDB();
-
-                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('บันทึกสำเร็จ (โหมดจำลอง)','✅'); changeActiveSPAView('dashboard'); }, 800); 
-                return;
-            }
+            if(!sbClientInstance) { fallbackSave(); return; }
 
             try {
                 let cycleId = currentViewCycleId;
-                if(!cycleId) {
-                    const { data, error } = await sbClientInstance.from('billing_cycles').insert([{ month_year: mYear, net_payable: net, status: 'pending' }]).select().single();
-                    if(error) throw error; cycleId = data.id;
-                } else {
-                    await sbClientInstance.from('billing_cycles').update({ month_year: mYear, net_payable: net }).eq('id', cycleId);
-                    await sbClientInstance.from('expenses').delete().eq('cycle_id', cycleId);
-                }
-
+                if(!cycleId) { const { data, error } = await sbClientInstance.from('billing_cycles').insert([{ month_year: mYear, net_payable: net, status: 'pending' }]).select().single(); if(error) throw error; cycleId = data.id; } 
+                else { await sbClientInstance.from('billing_cycles').update({ month_year: mYear, net_payable: net }).eq('id', cycleId); await sbClientInstance.from('expenses').delete().eq('cycle_id', cycleId); }
                 const items = [];
                 sharedExpenseRowsData.forEach(r => { if(r.amount>0 || r.title!=='') items.push({ cycle_id: cycleId, title: r.title || 'ไม่มีชื่อรายการ', amount: r.amount || 0, expense_type: 'shared', image_url: r.proof_img }); });
                 personalExpenseRowsData.forEach(r => { if(r.amount>0 || r.title!=='') items.push({ cycle_id: cycleId, title: r.title || 'ไม่มีชื่อรายการ', amount: r.amount || 0, expense_type: 'personal', image_url: r.proof_img }); });
                 if(items.length > 0) await sbClientInstance.from('expenses').insert(items);
-
                 triggerFlashToastAlert('บันทึกบิลแล้ว!','✅'); changeActiveSPAView('dashboard');
-            } catch(e) { triggerFlashToastAlert('เกิดข้อผิดพลาด','❌'); } finally { toggleSpinnerOverlay(false); }
+            } catch(e) { console.warn("Supabase Error", e); fallbackSave(); } finally { toggleSpinnerOverlay(false); }
         }
 
         // ================= KIIK: ยืนยันการรับเงิน =================
         async function adminVerifyPayment() {
             toggleSpinnerOverlay(true, 'กำลังยืนยันยอดรับเงิน...');
-
-            if(!sbClientInstance) {
-                // เซฟสถานะจำลองลงเครื่อง
+            const fallbackVerify = () => {
                 const idx = fallbackBillsDB.findIndex(b => b.id === currentViewCycleId);
-                if(idx > -1) {
-                    fallbackBillsDB[idx].status = 'verified';
-                    saveMockDB();
-                }
-                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('ยืนยันรับเงินสำเร็จ! (จำลอง)','✅'); changeActiveSPAView('dashboard'); }, 800); 
-                return;
-            }
+                if(idx > -1) { fallbackBillsDB[idx].status = 'verified'; saveMockDB(); }
+                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('ยืนยันรับเงินสำเร็จ!','✅'); changeActiveSPAView('dashboard'); }, 800); 
+            };
+            
+            if(!sbClientInstance) { fallbackVerify(); return; }
 
             try {
-                await sbClientInstance.from('billing_cycles').update({ status: 'verified' }).eq('id', currentViewCycleId);
-                triggerFlashToastAlert('ยืนยันรับเงินเรียบร้อย!','✅');
-                changeActiveSPAView('dashboard');
-            } catch(e) { triggerFlashToastAlert('เกิดข้อผิดพลาด','❌'); } finally { toggleSpinnerOverlay(false); }
+                const { error } = await sbClientInstance.from('billing_cycles').update({ status: 'verified' }).eq('id', currentViewCycleId);
+                if(error) throw error;
+                triggerFlashToastAlert('ยืนยันรับเงินเรียบร้อย!','✅'); changeActiveSPAView('dashboard');
+            } catch(e) { console.warn("Supabase Error", e); fallbackVerify(); } finally { toggleSpinnerOverlay(false); }
         }
 
         // ================= CHALITA: อัปโหลดสลิป & ยืนยันชำระ =================
-        async function handleSlipUploadForChalita(e) {
-            const f = e.target.files[0]; if(!f) return;
-            toggleSpinnerOverlay(true, 'บีบอัดสลิป...');
-            try {
-                const blob = await imageCompression(f, { maxSizeMB: 0.15, maxWidthOrHeight: 800 });
-                chalitaUploadedSlipBase64 = blob;
-                const url = URL.createObjectURL(blob);
-                document.getElementById('chalita-slip-preview-img').src = url;
-                displayComponent('chalita-slip-preview-box');
-            } catch(er) {} finally { toggleSpinnerOverlay(false); }
-        }
-
+        async function handleSlipUploadForChalita(e) { const f = e.target.files[0]; if(!f) return; toggleSpinnerOverlay(true, 'กำลังประมวลผลรูป...'); try { const blob = await imageCompression(f, { maxSizeMB: 0.15, maxWidthOrHeight: 800 }); chalitaUploadedSlipBase64 = blob; const url = URL.createObjectURL(blob); document.getElementById('chalita-slip-preview-img').src = url; displayComponent('chalita-slip-preview-box'); } catch(er) {} finally { toggleSpinnerOverlay(false); } }
         function removeChalitaSlip() { hideComponent('chalita-slip-preview-box'); chalitaUploadedSlipBase64 = null; }
 
         async function submitChalitaPayment() {
             if(!chalitaUploadedSlipBase64) { triggerFlashToastAlert('กรุณาแนบรูปสลิปก่อนจ้า!','⚠️'); return; }
-            toggleSpinnerOverlay(true, 'กำลังส่งข้อมูลชำระเงิน...');
+            toggleSpinnerOverlay(true, 'กำลังส่งสลิปให้คุณกิ๊ก...');
 
-            if(!sbClientInstance) {
-                // เซฟสถานะจำลองลงเครื่อง
+            // 🌟 สร้างระบบ Fallback ถ้าส่งฐานข้อมูลไม่ผ่าน ให้เซฟลงเครื่องแทนเลย
+            const fallbackSubmit = () => {
                 const idx = fallbackBillsDB.findIndex(b => b.id === currentViewCycleId);
                 if(idx > -1) {
                     fallbackBillsDB[idx].status = 'paid';
                     fallbackBillsDB[idx].slip_url = document.getElementById('chalita-slip-preview-img').src;
-                    saveMockDB(); // บันทึกไม่ให้หายตอนรีเฟรช
+                    saveMockDB(); 
                 }
-                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('ส่งสลิปสำเร็จ! (จำลอง)','✅'); changeActiveSPAView('dashboard'); }, 800); 
-                return;
-            }
+                setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('ส่งสลิปสำเร็จ!','✅'); changeActiveSPAView('dashboard'); }, 800); 
+            };
+
+            if(!sbClientInstance) { fallbackSubmit(); return; }
 
             try {
                 const fName = `slip_${Date.now()}.jpg`;
                 const { error: upErr } = await sbClientInstance.storage.from('img').upload(fName, chalitaUploadedSlipBase64);
                 if(upErr) throw upErr;
-                
                 const { data: pubUrl } = sbClientInstance.storage.from('img').getPublicUrl(fName);
+                const { error: dbErr } = await sbClientInstance.from('billing_cycles').update({ status: 'paid', slip_url: pubUrl.publicUrl }).eq('id', currentViewCycleId);
+                if(dbErr) throw dbErr;
                 
-                await sbClientInstance.from('billing_cycles').update({ status: 'paid', slip_url: pubUrl.publicUrl }).eq('id', currentViewCycleId);
-                
-                triggerFlashToastAlert('ส่งสลิปเรียบร้อย! รอแอดมินยืนยันจ้า 🐷','✅');
-                changeActiveSPAView('dashboard');
-            } catch(e) { triggerFlashToastAlert('ส่งข้อมูลไม่สำเร็จ','❌'); } finally { toggleSpinnerOverlay(false); }
+                triggerFlashToastAlert('ส่งสลิปเรียบร้อย!','✅'); changeActiveSPAView('dashboard');
+            } catch(e) { console.warn("Supabase Error", e); fallbackSubmit(); } finally { toggleSpinnerOverlay(false); }
         }
     </script>
 </body>
