@@ -171,8 +171,9 @@
                     </div>
                 </div>
 
-                <div id="admin-actions-hub" class="hide-view mt-4">
+                <div id="admin-actions-hub" class="hide-view mt-4 space-y-2">
                     <button onclick="commitAdminBillData()" class="w-full bg-gradient-to-r from-primary to-secondary text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2"><i data-lucide="save" class="w-5 h-5"></i> บันทึกข้อมูลบิลนี้</button>
+                    <button id="btn-admin-delete-bill" onclick="deleteAdminBillData()" class="hide-view w-full bg-danger text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2"><i data-lucide="trash-2" class="w-5 h-5"></i> 🗑️ ลบบิลเดือนนี้ถาวร</button>
                 </div>
             </div>
         </main>
@@ -187,7 +188,8 @@
 
     <script>
         const TARGET_SUPABASE_URL = 'https://nmwjaxqvqwhmwlhdsgic.supabase.co';
-        const TARGET_SUPABASE_ANON_KEY = 'sb_publishable_vNDrOZLePiEdtEzF5YuZww_v9wvmqfF';
+        // ⚠️ สำคัญมาก: เปลี่ยนคีย์ด้านล่างนี้ให้เป็นคีย์ที่ขึ้นต้นด้วย eyJ... (จากเมนู Project Settings -> API -> Project API keys (anon / public) ของ Supabase)
+        const TARGET_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5td2pheHF2cXdobXdsaGRzZ2ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMDA4MjMsImV4cCI6MjA5Nzc3NjgyM30.GAL4tB0X6WFza3Ax8Yvsg6iZoPBUmTcCztjS9Sr0IIw';
         const PROMPTPAY_NUM = '0642424146'; 
 
         let sbClientInstance = null;
@@ -292,6 +294,7 @@
         function setupBillingUI() {
             const isAdmin = currentAuthenticatedUser && currentAuthenticatedUser.role === 'admin';
             hideComponent('chalita-payment-section'); hideComponent('paid-status-banner'); hideComponent('btn-admin-verify'); hideComponent('admin-actions-hub');
+            hideComponent('btn-admin-delete-bill'); // ซ่อนปุ่มลบไว้เป็นค่าเริ่มต้นก่อนเสมอ
 
             if(isAdmin) { displayComponent('month-input-wrapper'); hideComponent('month-readonly-display'); displayComponent('admin-add-shared-btn'); displayComponent('admin-add-personal-btn'); } 
             else { hideComponent('month-input-wrapper'); displayComponent('month-readonly-display'); hideComponent('admin-add-shared-btn'); hideComponent('admin-add-personal-btn'); document.getElementById('month-readonly-display').innerText = `ประจำเดือน ${formatThaiMonth(document.getElementById('invoice-date-month').value)}`; }
@@ -305,17 +308,16 @@
                 else { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ส่งสลิปเรียบร้อย 📄'; bannerDesc.innerText = 'รอคุณกิ๊กตรวจสอบและยืนยันยอดจ้า ⏳'; } 
             } else {
                 // มุมมองคุณกิ๊ก (แอดมิน)
+                displayComponent('admin-actions-hub'); // เปิดพื้นที่แสดงปุ่มของแอดมิน
+                if (currentViewCycleId) { displayComponent('btn-admin-delete-bill'); } // 🌟 จะแสดงปุ่มลบเฉพาะเมื่อเป็นการเปิดดูบิลเก่าที่มีอยู่ในระบบเท่านั้น
+
                 if (currentViewStatus === 'verified') { 
                     displayComponent('paid-status-banner'); bannerTitle.innerText = 'ยอดนี้ตรวจสอบและยืนยันแล้ว 🐷'; bannerDesc.innerText = 'คุณกิ๊กได้รับเงินเรียบร้อย ✅'; 
                 } else if (currentViewStatus === 'paid' || currentSlipUrl) {
-                    // 🌟 จุดสำคัญ: ถ้ามีสลิปแนบมา โชว์ปุ่มอนุมัติทันที!
                     displayComponent('paid-status-banner');
                     bannerTitle.innerText = 'คุณชลิตาส่งสลิปมาแล้ว! 👀';
                     bannerDesc.innerText = 'กรุณาตรวจสอบสลิปและกดยืนยันรับเงินด้านล่าง 👇';
                     displayComponent('btn-admin-verify'); 
-                    displayComponent('admin-actions-hub');
-                } else {
-                    displayComponent('admin-actions-hub'); 
                 }
             }
 
@@ -360,7 +362,6 @@
                 let cycleId = currentViewCycleId;
                 if(!cycleId) { 
                     const { data, error } = await sbClientInstance.from('billing_cycles').insert([{ month_year: mYear, net_payable: net, status: 'pending' }]).select().single(); 
-                    // 🚨 แจ้งเตือนถ้าสร้างบิลใหม่ไม่เข้าเพราะติด RLS
                     if(error) { alert("🚨 บันทึกไม่เข้าฐานข้อมูล!\n\nระบบติด RLS ที่ตาราง billing_cycles ให้ไปที่ Supabase -> Table Editor -> เลือกตารางนี้ -> มองมุมขวาบนกด Disable RLS ครับ"); throw error; }
                     cycleId = data.id; 
                 } 
@@ -411,7 +412,6 @@
 
                 const { data: pubUrl } = sbClientInstance.storage.from('img').getPublicUrl(fName);
                 
-                // 🚨 แจ้งเตือนทันทีถ้าชลิตาส่งสลิปแล้วอัปเดตตารางไม่ผ่าน
                 const { error: dbErr } = await sbClientInstance.from('billing_cycles').update({ status: 'paid', slip_url: pubUrl.publicUrl }).eq('id', currentViewCycleId);
                 if(dbErr) { 
                     alert("🚨 ส่งสลิปสำเร็จแต่สถานะไม่อัปเดต!\n\nสาเหตุ: ฐานข้อมูลล็อกอยู่ ให้แอดมินไปปิด Disable RLS ที่ตาราง billing_cycles ครับ"); 
@@ -420,6 +420,43 @@
                 
                 triggerFlashToastAlert('ส่งสลิปเรียบร้อย!','✅'); changeActiveSPAView('dashboard');
             } catch(e) { triggerFlashToastAlert('ส่งข้อมูลไม่สำเร็จ','❌'); } finally { toggleSpinnerOverlay(false); }
+        }
+
+        // ================= KIIK: ฟังก์ชันลบข้อมูลบิลถาวร =================
+        async function deleteAdminBillData() {
+            if(!currentViewCycleId) return;
+            if(!confirm("⚠️ คุณกิ๊กแน่ใจใช่ไหมครับที่จะลบบิลเดือนนี้?\nรายการค่าใช้จ่ายย่อยและสลิปทั้งหมดของบิลนี้จะถูกลบออกถาวรทันที!")) return;
+
+            toggleSpinnerOverlay(true, 'กำลังลบข้อมูลบิล...');
+            if(!sbClientInstance) { 
+                setTimeout(()=>{ 
+                    fallbackBillsDB = fallbackBillsDB.filter(b => b.id !== currentViewCycleId);
+                    toggleSpinnerOverlay(false); 
+                    triggerFlashToastAlert('ลบบิลสำเร็จ (จำลอง)','✅'); 
+                    changeActiveSPAView('dashboard'); 
+                }, 800); 
+                return; 
+            }
+
+            try {
+                // 1. สั่งลบรายการค่าใช้จ่ายย่อยในตาราง expenses ที่ผูกกับบิลนี้ออกก่อน
+                await sbClientInstance.from('expenses').delete().eq('cycle_id', currentViewCycleId);
+                
+                // 2. สั่งลบบิลหลักในตาราง billing_cycles
+                const { error } = await sbClientInstance.from('billing_cycles').delete().eq('id', currentViewCycleId);
+                
+                if(error) { 
+                    alert("🚨 ลบข้อมูลไม่สำเร็จ!\nอาจเกิดจากสิทธิ์ในหลังบ้าน ให้ตรวจสอบการตั้งค่า Disable RLS ของตารางทั้งคู่ใน Supabase ด้วยนะครับ"); 
+                    throw error; 
+                }
+
+                triggerFlashToastAlert('ลบบิลเรียบร้อยแล้ว!','✅'); 
+                changeActiveSPAView('dashboard'); 
+            } catch(e) { 
+                triggerFlashToastAlert('เกิดข้อผิดพลาดในการลบ','❌'); 
+            } finally { 
+                toggleSpinnerOverlay(false); 
+            }
         }
     </script>
 </body>
