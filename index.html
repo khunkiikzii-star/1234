@@ -98,7 +98,10 @@
                 <div class="w-10 h-10 bg-pink-100 border border-primary/20 text-primary rounded-full flex items-center justify-center font-bold text-xl">🐷</div>
                 <div><h3 class="font-bold text-gray-800 text-sm leading-tight" id="header-user-title">...</h3><p class="text-[10px] bg-purple-100 text-secondary px-2 py-0.2 rounded-full font-bold inline-block" id="header-user-badge">...</p></div>
             </div>
-            <button onclick="promptLogoutConfirmation()" class="text-gray-400 hover:text-danger p-2 bg-gray-50 rounded-xl"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+            <!-- 🌟 ปรับปรุงปุ่มออกจากระบบให้เห็นชัดเจนขึ้น -->
+            <button onclick="promptLogoutConfirmation()" class="text-danger hover:bg-red-50 px-3 py-2 bg-gray-50 rounded-xl flex items-center gap-1.5 border border-red-100 transition-all active:scale-95 shadow-sm">
+                <i data-lucide="log-out" class="w-4 h-4"></i><span class="text-[11px] font-black">ออกระบบ</span>
+            </button>
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 max-w-md mx-auto w-full pb-28" id="workspace-viewport">
@@ -110,13 +113,13 @@
                 </div>
                 <div class="flex justify-between items-center mt-2">
                     <h3 class="text-sm font-black text-gray-700 pl-1">📋 เลือกเดือนเพื่อดูบิล</h3>
-                    <button id="btn-create-new-bill" onclick="prepareNewBillForm()" class="hide-view text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-full shadow-sm">+ สร้างบิลเดือนใหม่</button>
+                    <button id="btn-create-new-bill" onclick="prepareNewBillForm()" class="hide-view text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-full shadow-sm active:scale-95 transition-all">+ สร้างบิลเดือนใหม่</button>
                 </div>
                 <div id="historical-bills-feed" class="space-y-3"></div>
             </div>
 
             <div id="view-section-billing" class="hide-view fade-in space-y-4">
-                <button onclick="changeActiveSPAView('dashboard')" class="flex items-center gap-1 text-xs font-bold text-gray-500"><i data-lucide="arrow-left" class="w-4 h-4"></i> ย้อนกลับ</button>
+                <button onclick="changeActiveSPAView('dashboard')" class="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-primary transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i> ย้อนกลับ</button>
 
                 <div class="bg-white rounded-3xl shadow-lg border border-pink-100 p-4 space-y-4 relative overflow-hidden" id="invoice-screenshot-target">
                     <div class="text-center pb-3 border-b border-pink-100 relative">
@@ -126,13 +129,13 @@
                     </div>
 
                     <div class="bg-blue-50/50 rounded-2xl p-3 border border-blue-100 space-y-2">
-                        <div class="flex justify-between items-center"><span class="text-xs font-black text-secondary">👥 1. รายการหาร 2</span><button id="admin-add-shared-btn" onclick="addNewExpenseRow('shared')" class="text-[10px] font-bold bg-secondary text-white px-2.5 py-1 rounded-full">+ เพิ่มแถว</button></div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-black text-secondary">👥 1. รายการหาร 2</span><button id="admin-add-shared-btn" onclick="addNewExpenseRow('shared')" class="text-[10px] font-bold bg-secondary text-white px-2.5 py-1 rounded-full active:scale-95 transition-all">+ เพิ่มแถว</button></div>
                         <div id="shared-expense-rows-container" class="space-y-2"></div>
-                        <div class="pt-2 border-t border-blue-200 flex justify-between text-xs font-bold text-gray-600"><span>รวม: <span id="shared-subtotal-txt">0.00</span> บ.</span><span class="text-secondary bg-white px-2 py-0.5 rounded-lg border border-blue-200">หาร 2 = <span id="shared-half-txt">0.00</span> บ.</span></div>
+                        <div class="pt-2 border-t border-blue-200 flex justify-between text-xs font-bold text-gray-600"><span>รวม: <span id="shared-subtotal-txt">0.00</span> บ.</span><span class="text-secondary bg-white px-2 py-0.5 rounded-lg border border-blue-200 shadow-sm">หาร 2 = <span id="shared-half-txt">0.00</span> บ.</span></div>
                     </div>
 
                     <div class="bg-orange-50/50 rounded-2xl p-3 border border-orange-100 space-y-2">
-                        <div class="flex justify-between items-center"><span class="text-xs font-black text-orange-600">👩‍🦰 2. รายการส่วนตัว</span><button id="admin-add-personal-btn" onclick="addNewExpenseRow('personal')" class="text-[10px] font-bold bg-orange-500 text-white px-2.5 py-1 rounded-full">+ เพิ่มแถว</button></div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-black text-orange-600">👩‍🦰 2. รายการส่วนตัว</span><button id="admin-add-personal-btn" onclick="addNewExpenseRow('personal')" class="text-[10px] font-bold bg-orange-500 text-white px-2.5 py-1 rounded-full active:scale-95 transition-all">+ เพิ่มแถว</button></div>
                         <div id="personal-expense-rows-container" class="space-y-2"></div>
                         <div class="pt-2 border-t border-orange-200 flex justify-end text-xs font-bold text-gray-600"><span>รวมส่วนตัว: <span id="personal-subtotal-txt">0.00</span> บ.</span></div>
                     </div>
@@ -150,7 +153,7 @@
                         
                         <div id="paid-slip-image-box" class="mb-4"></div>
 
-                        <button id="btn-admin-verify" onclick="adminVerifyPayment()" class="hide-view w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <button id="btn-admin-verify" onclick="adminVerifyPayment()" class="hide-view w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95">
                             <i data-lucide="check-circle" class="w-6 h-6"></i> ยืนยันว่าได้รับเงินเรียบร้อยแล้ว
                         </button>
                     </div>
@@ -159,21 +162,37 @@
                         <div class="text-center"><span class="bg-warning text-white text-[10px] font-black px-3 py-1 rounded-full">⏳ รอยืนยันยอดชำระ</span></div>
                         <div class="flex flex-col items-center justify-center">
                             <p class="text-[11px] font-black text-gray-500 mb-2">สแกนจ่ายผ่านพร้อมเพย์</p>
-                            <div class="w-40 h-40 bg-white rounded-xl shadow-sm border border-gray-200 p-2 relative"><img id="promptpay-qr-img" src="" class="w-full h-full object-contain hide-view"><div id="qr-placeholder" class="text-center text-gray-300 absolute inset-0 flex flex-col items-center justify-center"><i data-lucide="qr-code" class="w-8 h-8 mb-1"></i><span class="text-[9px]">รอยอดเงิน</span></div></div>
-                            <p class="text-[11px] text-gray-500 font-bold mt-2">เบอร์รับเงิน: <span class="text-primary">064-2424146</span></p>
+                            <div class="w-40 h-40 bg-white rounded-xl shadow-sm border border-gray-200 p-2 relative">
+                                <img id="promptpay-qr-img" src="" class="w-full h-full object-contain hide-view">
+                                <div id="qr-placeholder" class="text-center text-gray-300 absolute inset-0 flex flex-col items-center justify-center"><i data-lucide="qr-code" class="w-8 h-8 mb-1"></i><span class="text-[9px]">รอยอดเงิน</span></div>
+                            </div>
+                            
+                            <!-- 🌟 เพิ่มปุ่มสำหรับโหลดรูป QR Code เซฟลงเครื่อง -->
+                            <button id="btn-download-qr" onclick="downloadQR()" class="hide-view mt-3 text-[10px] font-bold text-primary bg-pink-50 border border-pink-100 px-3 py-1.5 rounded-full flex items-center gap-1.5 hover:bg-pink-100 transition-all active:scale-95">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> บันทึกรูปคิวอาร์โค้ด
+                            </button>
+
+                            <!-- 🌟 เพิ่มปุ่มคัดลอกเบอร์พร้อมเพย์ -->
+                            <div class="flex items-center gap-2 mt-4 bg-white px-3 py-2 rounded-xl border border-gray-200 shadow-sm w-full justify-between">
+                                <p class="text-[11px] text-gray-500 font-bold">เบอร์: <span class="text-primary text-sm font-black tracking-wider">064-242-4146</span></p>
+                                <button onclick="copyPromptPay()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-[10px] font-bold transition-all active:scale-95 border border-gray-200">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
+                                </button>
+                            </div>
                         </div>
+
                         <div class="border-t border-gray-200 pt-3">
                             <p class="text-xs font-black text-gray-700 mb-2">อัปโหลดสลิปยืนยันการโอน</p>
-                            <label class="border-2 border-dashed border-primary/50 hover:bg-pink-50 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer bg-white"><i data-lucide="image-plus" class="w-5 h-5 text-primary mb-1"></i><span class="text-[10px] font-bold text-gray-500">แตะเพื่อแนบรูปสลิป</span><input type="file" class="hidden" accept="image/*" onchange="handleSlipUploadForChalita(event)"></label>
-                            <div id="chalita-slip-preview-box" class="mt-2 hide-view relative"><img id="chalita-slip-preview-img" src="" class="w-full rounded-lg border border-gray-200 cursor-pointer" onclick="openImageModal(this.src)"><button onclick="removeChalitaSlip()" class="absolute top-1 right-1 bg-danger text-white rounded-full p-1 shadow"><i data-lucide="x" class="w-3 h-3"></i></button></div>
+                            <label class="border-2 border-dashed border-primary/50 hover:bg-pink-50 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer bg-white transition-colors"><i data-lucide="image-plus" class="w-5 h-5 text-primary mb-1"></i><span class="text-[10px] font-bold text-gray-500">แตะเพื่อแนบรูปสลิป</span><input type="file" class="hidden" accept="image/*" onchange="handleSlipUploadForChalita(event)"></label>
+                            <div id="chalita-slip-preview-box" class="mt-2 hide-view relative"><img id="chalita-slip-preview-img" src="" class="w-full rounded-lg border border-gray-200 cursor-pointer" onclick="openImageModal(this.src)"><button onclick="removeChalitaSlip()" class="absolute top-1 right-1 bg-danger text-white rounded-full p-1 shadow-md hover:scale-110 transition-transform"><i data-lucide="x" class="w-3 h-3"></i></button></div>
                         </div>
-                        <button onclick="submitChalitaPayment()" class="w-full bg-success text-white font-black py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> แจ้งชำระเงิน (ส่งสลิป)</button>
+                        <button onclick="submitChalitaPayment()" class="w-full bg-success text-white font-black py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"><i data-lucide="send" class="w-4 h-4"></i> แจ้งชำระเงิน (ส่งสลิป)</button>
                     </div>
                 </div>
 
                 <div id="admin-actions-hub" class="hide-view mt-4 space-y-2">
-                    <button onclick="commitAdminBillData()" class="w-full bg-gradient-to-r from-primary to-secondary text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2"><i data-lucide="save" class="w-5 h-5"></i> บันทึกข้อมูลบิลนี้</button>
-                    <button id="btn-admin-delete-bill" onclick="deleteAdminBillData()" class="hide-view w-full bg-danger text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2"><i data-lucide="trash-2" class="w-5 h-5"></i> 🗑️ ลบบิลเดือนนี้ถาวร</button>
+                    <button onclick="commitAdminBillData()" class="w-full bg-gradient-to-r from-primary to-secondary text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2 active:scale-95 transition-transform"><i data-lucide="save" class="w-5 h-5"></i> บันทึกข้อมูลบิลนี้</button>
+                    <button id="btn-admin-delete-bill" onclick="deleteAdminBillData()" class="hide-view w-full bg-danger text-white text-base font-black py-4 rounded-2xl shadow-lg flex justify-center items-center gap-2 active:scale-95 transition-transform"><i data-lucide="trash-2" class="w-5 h-5"></i> 🗑️ ลบบิลเดือนนี้ถาวร</button>
                 </div>
             </div>
         </main>
@@ -182,13 +201,12 @@
     <div id="logout-confirm-dialog" class="fixed inset-0 bg-black/60 z-[99] flex items-center justify-center hide-view p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl text-center active-animation">
             <span class="text-4xl block mb-2">🥺</span><h3 class="text-base font-black text-gray-800 mb-2">ออกจากระบบ?</h3>
-            <div class="flex gap-2 mt-4"><button onclick="hideLogoutConfirmation()" class="flex-1 bg-gray-100 py-3 rounded-xl font-bold text-xs">ยกเลิก</button><button onclick="executeSecureAppLogout()" class="flex-1 bg-danger text-white py-3 rounded-xl font-bold text-xs shadow-md">ออกระบบ</button></div>
+            <div class="flex gap-2 mt-4"><button onclick="hideLogoutConfirmation()" class="flex-1 bg-gray-100 py-3 rounded-xl font-bold text-xs hover:bg-gray-200 transition-colors">ยกเลิก</button><button onclick="executeSecureAppLogout()" class="flex-1 bg-danger text-white py-3 rounded-xl font-bold text-xs shadow-md active:scale-95 transition-transform">ออกระบบ</button></div>
         </div>
     </div>
 
     <script>
         const TARGET_SUPABASE_URL = 'https://nmwjaxqvqwhmwlhdsgic.supabase.co';
-        // คีย์ถูกตั้งค่าเป็นของ Supabase แล้ว
         const TARGET_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5td2pheHF2cXdobXdsaGRzZ2ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMDA4MjMsImV4cCI6MjA5Nzc3NjgyM30.GAL4tB0X6WFza3Ax8Yvsg6iZoPBUmTcCztjS9Sr0IIw';
         const PROMPTPAY_NUM = '0642424146'; 
 
@@ -206,8 +224,6 @@
         let chalitaUploadedSlipBase64 = null;
         let sharedExpenseRowsData = []; 
         let personalExpenseRowsData = [];
-
-        // 🌟 ลบข้อมูลปลอมออกให้หมดแล้ว เปลี่ยนเป็น Array ว่าง
         let fallbackBillsDB = [];
 
         function displayComponent(id) { document.getElementById(id).classList.remove('hide-view'); }
@@ -254,15 +270,28 @@
             }
             const totalSum = records.reduce((acc, curr) => acc + (parseFloat(curr.net_payable)||0), 0);
             document.getElementById('dash-total-sum').innerText = totalSum.toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿';
+            
             const container = document.getElementById('historical-bills-feed');
-            if(records.length === 0) { container.innerHTML = `<p class="text-center text-xs font-bold text-gray-400 py-6">ยังไม่มีรายการบิล</p>`; return; }
+            
+            // 🌟 ปรับปรุงหน้าจอตอนที่ยังไม่มีบิลให้ชัดเจนขึ้น
+            if(records.length === 0) { 
+                if(currentAuthenticatedUser.role === 'admin') {
+                    // มุมมองคุณกิ๊ก: มีปุ่มให้กดสร้างบิลอันแรก
+                    container.innerHTML = `<div class="text-center py-8 bg-white rounded-3xl border-2 border-dashed border-pink-200 mt-4 active-animation"><p class="text-5xl mb-3">📝</p><h3 class="text-sm font-black text-gray-700 mb-1">ยังไม่มีบิลในระบบ</h3><p class="text-[10px] text-gray-500 mb-4">เริ่มต้นบันทึกยอดค่าใช้จ่ายเดือนแรกกันเลย</p><button onclick="prepareNewBillForm()" class="bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-all">+ สร้างบิลเดือนใหม่</button></div>`; 
+                } else {
+                    // มุมมองคุณชลิตา: รอคุณกิ๊กสร้างบิล
+                    container.innerHTML = `<div class="text-center py-10 bg-white rounded-3xl border border-pink-100 shadow-sm mt-4 active-animation"><p class="text-5xl mb-3">📭</p><h3 class="text-sm font-black text-gray-700">ยังไม่มีรายการบิล</h3><p class="text-[10px] text-gray-500 mt-1">รอคุณกิ๊กบันทึกและส่งยอดมาให้นะจ๊ะ 🐷</p></div>`; 
+                }
+                return; 
+            }
 
             container.innerHTML = records.map(item => {
                 const isVerified = item.status === 'verified'; const isPaid = item.status === 'paid' || (item.slip_url && item.slip_url !== ''); 
                 let badge = ''; let icon = '📝';
                 if (isVerified) { badge = `<span class="bg-success text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">✅ ยืนยันแล้ว</span>`; icon = '🐷'; } else if (isPaid) { badge = `<span class="bg-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">📄 รอตรวจสลิป</span>`; icon = '💸'; } else { badge = `<span class="bg-warning text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">⏳ รอยืนยันยอด</span>`; }
-                return `<div onclick="openBillDetails('${item.id}', '${item.month_year}', '${item.status}', '${item.slip_url || ''}')" class="bg-white p-4 rounded-2xl border border-pink-100 flex justify-between items-center shadow-sm cursor-pointer"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-xl shadow-inner">${icon}</div><div><p class="font-black text-sm text-gray-800 mb-0.5">บิลเดือน ${formatThaiMonth(item.month_year)}</p>${badge}</div></div><div class="text-right"><p class="font-black text-primary">${parseFloat(item.net_payable).toLocaleString('th-TH', {minimumFractionDigits:2})} ฿</p></div></div>`;
-            }).join(''); lucide.createIcons();
+                return `<div onclick="openBillDetails('${item.id}', '${item.month_year}', '${item.status}', '${item.slip_url || ''}')" class="bg-white p-4 rounded-2xl border border-pink-100 flex justify-between items-center shadow-sm cursor-pointer hover:border-primary transition-colors"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-xl shadow-inner">${icon}</div><div><p class="font-black text-sm text-gray-800 mb-0.5">บิลเดือน ${formatThaiMonth(item.month_year)}</p>${badge}</div></div><div class="text-right"><p class="font-black text-primary">${parseFloat(item.net_payable).toLocaleString('th-TH', {minimumFractionDigits:2})} ฿</p></div></div>`;
+            }).join(''); 
+            lucide.createIcons();
         }
 
         function prepareNewBillForm() {
@@ -326,9 +355,9 @@
             const isAdmin = currentAuthenticatedUser.role === 'admin';
             const renderBlock = (dataArray, type) => dataArray.map((row, idx) => {
                 if(isAdmin) {
-                    return `<div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm space-y-2"><div class="flex items-center gap-2"><input type="text" value="${row.title}" onchange="updateData('${type}',${idx},'title',this.value)" class="flex-1 bg-gray-50 rounded-lg px-2 py-2 text-xs font-bold outline-none border border-gray-200" placeholder="ชื่อรายการ"><input type="number" step="any" value="${row.amount||''}" placeholder="0" onkeyup="calcTotals()" onchange="updateData('${type}',${idx},'amount',this.value)" class="w-20 bg-gray-50 rounded-lg px-2 py-2 text-xs font-black text-right outline-none border border-gray-200"><button onclick="delRow('${type}',${idx})" class="text-danger p-2 bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button></div><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-secondary bg-purple-50 px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5"><i data-lucide="camera" class="w-3.5 h-3.5"></i> ${row.proof_img ? 'เปลี่ยนรูปสลิป' : 'แนบสลิป/บิล'}<input type="file" accept="image/*" class="hidden" onchange="attachAdminProof(event,'${type}',${idx})"></label></div>${row.proof_img ? `<div class="relative inline-block mt-1"><img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-24 rounded-lg border border-gray-200 object-contain shadow-sm cursor-pointer"><button onclick="removeAdminProof('${type}',${idx})" class="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1 shadow-md"><i data-lucide="x" class="w-3 h-3"></i></button></div>` : ''}</div>`;
+                    return `<div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm space-y-2"><div class="flex items-center gap-2"><input type="text" value="${row.title}" onchange="updateData('${type}',${idx},'title',this.value)" class="flex-1 bg-gray-50 rounded-lg px-2 py-2 text-xs font-bold outline-none border border-gray-200 focus:border-primary" placeholder="ชื่อรายการ"><input type="number" step="any" value="${row.amount||''}" placeholder="0" onkeyup="calcTotals()" onchange="updateData('${type}',${idx},'amount',this.value)" class="w-20 bg-gray-50 rounded-lg px-2 py-2 text-xs font-black text-right outline-none border border-gray-200 focus:border-primary"><button onclick="delRow('${type}',${idx})" class="text-danger p-2 bg-red-50 rounded-lg active:scale-95 transition-transform"><i data-lucide="trash" class="w-4 h-4"></i></button></div><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-secondary bg-purple-50 px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5 hover:bg-purple-100 transition-colors"><i data-lucide="camera" class="w-3.5 h-3.5"></i> ${row.proof_img ? 'เปลี่ยนรูปสลิป' : 'แนบสลิป/บิล'}<input type="file" accept="image/*" class="hidden" onchange="attachAdminProof(event,'${type}',${idx})"></label></div>${row.proof_img ? `<div class="relative inline-block mt-1"><img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-24 rounded-lg border border-gray-200 object-contain shadow-sm cursor-pointer hover:opacity-80 transition-opacity"><button onclick="removeAdminProof('${type}',${idx})" class="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1 shadow-md hover:scale-110 transition-transform"><i data-lucide="x" class="w-3 h-3"></i></button></div>` : ''}</div>`;
                 } else {
-                    const proofHtml = row.proof_img ? `<img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-32 mt-2 rounded-lg border border-pink-100 object-contain shadow-sm cursor-pointer">` : '';
+                    const proofHtml = row.proof_img ? `<img src="${row.proof_img}" onclick="openImageModal('${row.proof_img}')" class="max-h-32 mt-2 rounded-lg border border-pink-100 object-contain shadow-sm cursor-pointer hover:opacity-90 transition-opacity">` : '';
                     return `<div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col text-xs"><div class="flex justify-between items-start mb-1"><span class="font-bold text-gray-700 flex-1 pr-2">🔸 ${row.title}</span><span class="font-black text-primary bg-pink-50 px-2 py-0.5 rounded-md">${parseFloat(row.amount).toLocaleString('th-TH',{minimumFractionDigits:2})} บ.</span></div>${row.proof_img ? proofHtml : '<div class="mt-1 flex items-center gap-1 text-[9px] text-gray-400 italic">ไม่มีรูปแนบ</div>'}</div>`;
                 }
             }).join('');
@@ -346,9 +375,40 @@
             document.getElementById('shared-subtotal-txt').innerText = sSum.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('shared-half-txt').innerText = sHalf.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('personal-subtotal-txt').innerText = pSum.toLocaleString('th-TH',{minimumFractionDigits:2}); document.getElementById('grand-net-total-display').innerText = net.toLocaleString('th-TH',{minimumFractionDigits:2}) + ' ฿';
             if(currentAuthenticatedUser && currentAuthenticatedUser.role === 'user' && (currentViewStatus === 'pending' && !currentSlipUrl)) {
                 const qrImg = document.getElementById('promptpay-qr-img');
-                if(net > 0) { qrImg.src = `https://promptpay.io/${PROMPTPAY_NUM}/${net.toFixed(2)}.png`; displayComponent('promptpay-qr-img'); hideComponent('qr-placeholder'); } 
-                else { hideComponent('promptpay-qr-img'); displayComponent('qr-placeholder'); }
+                if(net > 0) { 
+                    qrImg.src = `https://promptpay.io/${PROMPTPAY_NUM}/${net.toFixed(2)}.png`; 
+                    displayComponent('promptpay-qr-img'); 
+                    hideComponent('qr-placeholder'); 
+                    displayComponent('btn-download-qr'); // แสดงปุ่มเซฟ QR
+                } 
+                else { 
+                    hideComponent('promptpay-qr-img'); 
+                    displayComponent('qr-placeholder'); 
+                    hideComponent('btn-download-qr'); // ซ่อนปุ่มเซฟ QR
+                }
             }
+        }
+
+        // 🌟 ฟังก์ชันดาวน์โหลด QR Code สำหรับคุณชลิตา
+        function downloadQR() {
+            const qrImg = document.getElementById('promptpay-qr-img');
+            if(!qrImg.src || qrImg.src === '') { triggerFlashToastAlert('ยังไม่มีรูปคิวอาร์โค้ด', '⚠️'); return; }
+            const link = document.createElement('a');
+            link.href = qrImg.src;
+            link.download = `QR_PromptPay_${document.getElementById('invoice-date-month').value}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            triggerFlashToastAlert('บันทึกคิวอาร์โค้ดลงเครื่องแล้ว!', '💾');
+        }
+
+        // 🌟 ฟังก์ชันคัดลอกเบอร์พร้อมเพย์
+        function copyPromptPay() {
+            navigator.clipboard.writeText('0642424146').then(() => {
+                triggerFlashToastAlert('คัดลอกเบอร์พร้อมเพย์เรียบร้อย!', '📋');
+            }).catch(err => {
+                triggerFlashToastAlert('คัดลอกไม่สำเร็จ', '❌');
+            });
         }
 
         async function commitAdminBillData() {
