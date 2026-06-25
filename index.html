@@ -207,7 +207,8 @@
         let sharedExpenseRowsData = []; 
         let personalExpenseRowsData = [];
 
-        let fallbackBillsDB = [ { id: 'mock1', month_year: '2026-05', net_payable: 1283.57, status: 'pending', slip_url: '' } ];
+        // 🌟 ลบข้อมูลปลอมออกให้หมดแล้ว เปลี่ยนเป็น Array ว่าง
+        let fallbackBillsDB = [];
 
         function displayComponent(id) { document.getElementById(id).classList.remove('hide-view'); }
         function hideComponent(id) { document.getElementById(id).classList.add('hide-view'); }
@@ -416,7 +417,6 @@
             } catch(e) { triggerFlashToastAlert('ส่งข้อมูลไม่สำเร็จ','❌'); } finally { toggleSpinnerOverlay(false); }
         }
 
-        // ================= KIIK: ฟังก์ชันลบข้อมูลบิลถาวร (โหมดจับผิด Error) =================
         async function deleteAdminBillData() {
             if(!currentViewCycleId) return;
             if(!confirm("⚠️ คุณกิ๊กแน่ใจใช่ไหมครับที่จะลบบิลเดือนนี้?\nรายการค่าใช้จ่ายย่อยและสลิปทั้งหมดของบิลนี้จะถูกลบออกถาวรทันที!")) return;
@@ -433,14 +433,12 @@
             }
 
             try {
-                // 1. สั่งลบรายการย่อยก่อน พร้อมดักจับ Error
                 const { error: expError } = await sbClientInstance.from('expenses').delete().eq('cycle_id', currentViewCycleId);
                 if(expError) {
                     alert("🚨 ลบรายการย่อยไม่สำเร็จ!\nสาเหตุจาก Supabase: " + expError.message);
                     throw expError;
                 }
                 
-                // 2. สั่งลบบิลหลัก พร้อมดักจับ Error
                 const { error: billError } = await sbClientInstance.from('billing_cycles').delete().eq('id', currentViewCycleId);
                 if(billError) { 
                     alert("🚨 ลบบิลหลักไม่สำเร็จ!\nสาเหตุจาก Supabase: " + billError.message); 
