@@ -188,7 +188,7 @@
 
     <script>
         const TARGET_SUPABASE_URL = 'https://nmwjaxqvqwhmwlhdsgic.supabase.co';
-        // ⚠️ สำคัญมาก: เปลี่ยนคีย์ด้านล่างนี้ให้เป็นคีย์ที่ขึ้นต้นด้วย eyJ... (จากเมนู Project Settings -> API -> Project API keys (anon / public) ของ Supabase)
+        // คีย์ถูกตั้งค่าเป็นของ Supabase แล้ว
         const TARGET_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5td2pheHF2cXdobXdsaGRzZ2ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMDA4MjMsImV4cCI6MjA5Nzc3NjgyM30.GAL4tB0X6WFza3Ax8Yvsg6iZoPBUmTcCztjS9Sr0IIw';
         const PROMPTPAY_NUM = '0642424146'; 
 
@@ -202,12 +202,11 @@
         let currentAuthenticatedUser = null; 
         let currentViewCycleId = null; 
         let currentViewStatus = 'pending'; 
-        let currentSlipUrl = ''; // ตัวแปรเก็บสลิป
+        let currentSlipUrl = ''; 
         let chalitaUploadedSlipBase64 = null;
         let sharedExpenseRowsData = []; 
         let personalExpenseRowsData = [];
 
-        // ตัวแปรจำลองกรณีเชื่อมต่อ Database ไม่ได้
         let fallbackBillsDB = [ { id: 'mock1', month_year: '2026-05', net_payable: 1283.57, status: 'pending', slip_url: '' } ];
 
         function displayComponent(id) { document.getElementById(id).classList.remove('hide-view'); }
@@ -294,7 +293,7 @@
         function setupBillingUI() {
             const isAdmin = currentAuthenticatedUser && currentAuthenticatedUser.role === 'admin';
             hideComponent('chalita-payment-section'); hideComponent('paid-status-banner'); hideComponent('btn-admin-verify'); hideComponent('admin-actions-hub');
-            hideComponent('btn-admin-delete-bill'); // ซ่อนปุ่มลบไว้เป็นค่าเริ่มต้นก่อนเสมอ
+            hideComponent('btn-admin-delete-bill'); 
 
             if(isAdmin) { displayComponent('month-input-wrapper'); hideComponent('month-readonly-display'); displayComponent('admin-add-shared-btn'); displayComponent('admin-add-personal-btn'); } 
             else { hideComponent('month-input-wrapper'); displayComponent('month-readonly-display'); hideComponent('admin-add-shared-btn'); hideComponent('admin-add-personal-btn'); document.getElementById('month-readonly-display').innerText = `ประจำเดือน ${formatThaiMonth(document.getElementById('invoice-date-month').value)}`; }
@@ -302,14 +301,12 @@
             const bannerTitle = document.getElementById('paid-status-title'); const bannerDesc = document.getElementById('paid-status-desc');
 
             if (!isAdmin) {
-                // มุมมองชลิตา
                 if (currentViewStatus === 'pending' && !currentSlipUrl) { displayComponent('chalita-payment-section'); } 
                 else if (currentViewStatus === 'verified') { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ชำระเสร็จสิ้นแล้ว ✅'; bannerDesc.innerText = 'คุณกิ๊กยืนยันยอดเรียบร้อย ขอบคุณจ้า 🐷'; }
                 else { displayComponent('paid-status-banner'); bannerTitle.innerText = 'ส่งสลิปเรียบร้อย 📄'; bannerDesc.innerText = 'รอคุณกิ๊กตรวจสอบและยืนยันยอดจ้า ⏳'; } 
             } else {
-                // มุมมองคุณกิ๊ก (แอดมิน)
-                displayComponent('admin-actions-hub'); // เปิดพื้นที่แสดงปุ่มของแอดมิน
-                if (currentViewCycleId) { displayComponent('btn-admin-delete-bill'); } // 🌟 จะแสดงปุ่มลบเฉพาะเมื่อเป็นการเปิดดูบิลเก่าที่มีอยู่ในระบบเท่านั้น
+                displayComponent('admin-actions-hub'); 
+                if (currentViewCycleId) { displayComponent('btn-admin-delete-bill'); } 
 
                 if (currentViewStatus === 'verified') { 
                     displayComponent('paid-status-banner'); bannerTitle.innerText = 'ยอดนี้ตรวจสอบและยืนยันแล้ว 🐷'; bannerDesc.innerText = 'คุณกิ๊กได้รับเงินเรียบร้อย ✅'; 
@@ -353,7 +350,6 @@
             }
         }
 
-        // ================= KIIK: บันทึกข้อมูลบิล =================
         async function commitAdminBillData() {
             const mYear = document.getElementById('invoice-date-month').value; const net = parseFloat(document.getElementById('grand-net-total-display').innerText.replace(/,/g,'')); toggleSpinnerOverlay(true, 'กำลังบันทึกบิล...');
             if(!sbClientInstance) { setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('บันทึกสำเร็จ (จำลอง)','✅'); changeActiveSPAView('dashboard'); }, 800); return; }
@@ -384,7 +380,6 @@
             } catch(e) { triggerFlashToastAlert('เกิดข้อผิดพลาด','❌'); } finally { toggleSpinnerOverlay(false); }
         }
 
-        // ================= KIIK: ยืนยันการรับเงิน =================
         async function adminVerifyPayment() {
             toggleSpinnerOverlay(true, 'กำลังยืนยันยอดรับเงิน...');
             if(!sbClientInstance) { setTimeout(()=>{ toggleSpinnerOverlay(false); triggerFlashToastAlert('ยืนยันรับเงินสำเร็จ!','✅'); changeActiveSPAView('dashboard'); }, 800); return; }
@@ -396,7 +391,6 @@
             } catch(e) { triggerFlashToastAlert('เกิดข้อผิดพลาด','❌'); } finally { toggleSpinnerOverlay(false); }
         }
 
-        // ================= CHALITA: อัปโหลดสลิป & ยืนยันชำระ =================
         async function handleSlipUploadForChalita(e) { const f = e.target.files[0]; if(!f) return; toggleSpinnerOverlay(true, 'กำลังเตรียมรูป...'); try { const blob = await imageCompression(f, { maxSizeMB: 0.15, maxWidthOrHeight: 800 }); chalitaUploadedSlipBase64 = blob; const url = URL.createObjectURL(blob); document.getElementById('chalita-slip-preview-img').src = url; displayComponent('chalita-slip-preview-box'); } catch(er) {} finally { toggleSpinnerOverlay(false); } }
         function removeChalitaSlip() { hideComponent('chalita-slip-preview-box'); chalitaUploadedSlipBase64 = null; }
 
@@ -422,7 +416,7 @@
             } catch(e) { triggerFlashToastAlert('ส่งข้อมูลไม่สำเร็จ','❌'); } finally { toggleSpinnerOverlay(false); }
         }
 
-        // ================= KIIK: ฟังก์ชันลบข้อมูลบิลถาวร =================
+        // ================= KIIK: ฟังก์ชันลบข้อมูลบิลถาวร (โหมดจับผิด Error) =================
         async function deleteAdminBillData() {
             if(!currentViewCycleId) return;
             if(!confirm("⚠️ คุณกิ๊กแน่ใจใช่ไหมครับที่จะลบบิลเดือนนี้?\nรายการค่าใช้จ่ายย่อยและสลิปทั้งหมดของบิลนี้จะถูกลบออกถาวรทันที!")) return;
@@ -439,21 +433,25 @@
             }
 
             try {
-                // 1. สั่งลบรายการค่าใช้จ่ายย่อยในตาราง expenses ที่ผูกกับบิลนี้ออกก่อน
-                await sbClientInstance.from('expenses').delete().eq('cycle_id', currentViewCycleId);
+                // 1. สั่งลบรายการย่อยก่อน พร้อมดักจับ Error
+                const { error: expError } = await sbClientInstance.from('expenses').delete().eq('cycle_id', currentViewCycleId);
+                if(expError) {
+                    alert("🚨 ลบรายการย่อยไม่สำเร็จ!\nสาเหตุจาก Supabase: " + expError.message);
+                    throw expError;
+                }
                 
-                // 2. สั่งลบบิลหลักในตาราง billing_cycles
-                const { error } = await sbClientInstance.from('billing_cycles').delete().eq('id', currentViewCycleId);
-                
-                if(error) { 
-                    alert("🚨 ลบข้อมูลไม่สำเร็จ!\nอาจเกิดจากสิทธิ์ในหลังบ้าน ให้ตรวจสอบการตั้งค่า Disable RLS ของตารางทั้งคู่ใน Supabase ด้วยนะครับ"); 
-                    throw error; 
+                // 2. สั่งลบบิลหลัก พร้อมดักจับ Error
+                const { error: billError } = await sbClientInstance.from('billing_cycles').delete().eq('id', currentViewCycleId);
+                if(billError) { 
+                    alert("🚨 ลบบิลหลักไม่สำเร็จ!\nสาเหตุจาก Supabase: " + billError.message); 
+                    throw billError; 
                 }
 
                 triggerFlashToastAlert('ลบบิลเรียบร้อยแล้ว!','✅'); 
                 changeActiveSPAView('dashboard'); 
             } catch(e) { 
                 triggerFlashToastAlert('เกิดข้อผิดพลาดในการลบ','❌'); 
+                console.error(e);
             } finally { 
                 toggleSpinnerOverlay(false); 
             }
